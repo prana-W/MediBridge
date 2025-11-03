@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 const Dictaphone = () => {
+    const silenceTimerRef = useRef(null);
+    const prevTranscriptRef = useRef('');
+
     const {
         transcript,
         listening,
@@ -9,27 +12,48 @@ const Dictaphone = () => {
         browserSupportsSpeechRecognition
     } = useSpeechRecognition();
 
+    // Monitor transcript changes
+    useEffect(() => {
+        if (listening) {
+            // Clear previous timer
+            if (silenceTimerRef.current) {
+                clearTimeout(silenceTimerRef.current);
+            }
+
+            // Only set timer if transcript changed
+            if (transcript !== prevTranscriptRef.current) {
+                prevTranscriptRef.current = transcript;
+
+                // Auto-stop after 4 seconds of no change
+                silenceTimerRef.current = setTimeout(() => {
+                    console.log('4 seconds of silence, stopping...');
+                    SpeechRecognition.stopListening();
+                }, 4000);
+            }
+        }
+
+        return () => {
+            if (silenceTimerRef.current) {
+                clearTimeout(silenceTimerRef.current);
+            }
+        };
+    }, [transcript, listening]);
+
     if (!browserSupportsSpeechRecognition) {
         return <span>Browser doesn't support speech recognition.</span>;
     }
 
-    // Start continuous listening
     const startContinuousListening = () => {
+        prevTranscriptRef.current = '';
         SpeechRecognition.startListening({
-            continuous: true,  // Keep listening continuously
-            language: 'en-US'  // Set your language
+            continuous: true,
+            language: 'en-US'
         });
     };
 
     return (
-        <div>
-            <p>Microphone: {listening ? 'on' : 'off'}</p>
+        <div style={{ padding: '20px' }}>
+            <p>Microphone: {listening ? '🎤 ON' : '🔇 OFF'}</p>
             <button onClick={startContinuousListening}>Start</button>
             <button onClick={SpeechRecognition.stopListening}>Stop</button>
             <button onClick={resetTranscript}>Reset</button>
-            <p>{transcript}</p>
-        </div>
-    );
-};
-
-export default Dictaphone;
