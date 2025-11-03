@@ -32,6 +32,12 @@ const patientSchema = new mongoose.Schema(
         refreshToken: {
             type: String,
         },
+        state: {
+            type: String,
+            required: true,
+            lowercase: true,
+            trim: true
+        }
     },
     { timestamps: true }
 );
