@@ -61,7 +61,7 @@ export default function PatientDashboard() {
       if (selectedHospital && selectedDepartment) {
         try {
           setBookingStatus("Loading...");
-          const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/xyz`, {
+          const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/doctor/getDoctors`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

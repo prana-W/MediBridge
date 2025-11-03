@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Stethoscope, Mail, Phone, Lock, User, Building2, CreditCard, Calendar } from 'lucide-react';
+import { Stethoscope, Mail, Lock, User, Building2, CreditCard, Calendar, Search } from 'lucide-react';
 
-const API_BASE_URL = import.meta.env.VITE_SERVER_URL; // Update with your API URL
+const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
 
 export default function DoctorAuth() {
     const [isLogin, setIsLogin] = useState(true);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
+    const [hospitals, setHospitals] = useState([]);
+    const [filteredHospitals, setFilteredHospitals] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const [loginForm, setLoginForm] = useState({
         email: '',
@@ -43,6 +46,33 @@ export default function DoctorAuth() {
 
     const weekDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
+    // ✅ Fetch Hospitals on Mount
+    useEffect(() => {
+        const fetchHospitals = async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/hospital/all`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (!res.ok) throw new Error('Failed to fetch hospitals');
+                const data = await res.json();
+                setHospitals(data.data || []);
+                setFilteredHospitals(data.data || []);
+            } catch (err) {
+                console.error('Error fetching hospitals:', err);
+            }
+        };
+        fetchHospitals();
+    }, []);
+
+    // ✅ Search Filter Logic
+    useEffect(() => {
+        const filtered = hospitals.filter(h =>
+            h.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredHospitals(filtered);
+    }, [searchTerm, hospitals]);
+
     const handleLoginSubmit = (e) => {
         e.preventDefault();
         setMessage({ type: '', text: '' });
@@ -56,11 +86,8 @@ export default function DoctorAuth() {
         })
             .then(response => response.json().then(data => ({ status: response.ok, data })))
             .then(({ status, data }) => {
-                if (status) {
-                    setMessage({ type: 'success', text: data.message || 'Login successful!' });
-                } else {
-                    setMessage({ type: 'error', text: data.message || 'Login failed!' });
-                }
+                if (status) setMessage({ type: 'success', text: data.message || 'Login successful!' });
+                else setMessage({ type: 'error', text: data.message || 'Login failed!' });
                 setLoading(false);
             })
             .catch(() => {
@@ -146,42 +173,26 @@ export default function DoctorAuth() {
 
                     {isLogin ? (
                         <form onSubmit={handleLoginSubmit} className="space-y-4">
+                            {/* --- LOGIN --- */}
                             <div className="space-y-2">
-                                <Label htmlFor="login-email">Email or Phone Number</Label>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                    <Input
-                                        id="login-email"
-                                        placeholder="doctor@hospital.com"
-                                        className="pl-10"
-                                        value={loginForm.email}
-                                        onChange={(e) => {
-                                            const value = e.target.value;
-                                            setLoginForm(prev => ({
-                                                ...prev,
-                                                email: /^\d+$/.test(value) ? '' : value
-
-                                            }));
-                                        }}
-                                        required
-                                    />
-                                </div>
+                                <Label>Email or Phone Number</Label>
+                                <Input
+                                    placeholder="doctor@hospital.com"
+                                    value={loginForm.email}
+                                    onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
+                                    required
+                                />
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="login-password">Password</Label>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                    <Input
-                                        id="login-password"
-                                        type="password"
-                                        placeholder="••••••••"
-                                        className="pl-10"
-                                        value={loginForm.password}
-                                        onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
-                                        required
-                                    />
-                                </div>
+                                <Label>Password</Label>
+                                <Input
+                                    type="password"
+                                    placeholder="••••••••"
+                                    value={loginForm.password}
+                                    onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
+                                    required
+                                />
                             </div>
 
                             <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
@@ -190,25 +201,24 @@ export default function DoctorAuth() {
                         </form>
                     ) : (
                         <form onSubmit={handleSignupSubmit} className="space-y-4">
+                            {/* --- SIGNUP --- */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="name">Full Name</Label>
-                                    <div className="relative">
-                                        <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                        <Input
-                                            id="name"
-                                            placeholder="Dr. John Doe"
-                                            className="pl-10"
-                                            value={signupForm.name}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, name: e.target.value }))}
-                                            required
-                                        />
-                                    </div>
+                                    <Label>Full Name</Label>
+                                    <Input
+                                        placeholder="Dr. John Doe"
+                                        value={signupForm.name}
+                                        onChange={(e) => setSignupForm(prev => ({ ...prev, name: e.target.value }))}
+                                        required
+                                    />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="department">Department</Label>
-                                    <Select value={signupForm.department} onValueChange={(value) => setSignupForm(prev => ({ ...prev, department: value }))}>
+                                    <Label>Department</Label>
+                                    <Select
+                                        value={signupForm.department}
+                                        onValueChange={(value) => setSignupForm(prev => ({ ...prev, department: value }))}
+                                    >
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select department" />
                                         </SelectTrigger>
@@ -222,92 +232,89 @@ export default function DoctorAuth() {
                                     </Select>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <Label htmlFor="hospital">Hospital</Label>
-                                    <div className="relative">
-                                        <Building2 className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                        <Input
-                                            id="hospital"
-                                            placeholder="City General Hospital"
-                                            className="pl-10"
-                                            value={signupForm.hospital}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, hospital: e.target.value }))}
-                                            required
-                                        />
-                                    </div>
+                                {/* ✅ HOSPITAL DROPDOWN WITH SEARCH */}
+                                <div className="space-y-2 md:col-span-2">
+                                    <Label>Hospital</Label>
+                                    <Select
+                                        value={signupForm.hospital}
+                                        onValueChange={(value) => setSignupForm(prev => ({ ...prev, hospital: value }))}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select hospital" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <div className="p-2">
+                                                <div className="relative mb-2">
+                                                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                                    <Input
+                                                        type="text"
+                                                        placeholder="Search hospital..."
+                                                        className="pl-9 text-sm"
+                                                        value={searchTerm}
+                                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                                    />
+                                                </div>
+                                                {filteredHospitals.length > 0 ? (
+                                                    filteredHospitals.map((hospital, idx) => (
+                                                        <SelectItem key={idx} value={hospital.name}>
+                                                            {hospital.name} ({hospital.state})
+                                                        </SelectItem>
+                                                    ))
+                                                ) : (
+                                                    <p className="text-gray-500 text-sm px-2">No hospitals found</p>
+                                                )}
+                                            </div>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="idCard">ID Card Number</Label>
-                                    <div className="relative">
-                                        <CreditCard className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                        <Input
-                                            id="idCard"
-                                            placeholder="MED123456"
-                                            className="pl-10"
-                                            value={signupForm.idCardNumber}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, idCardNumber: e.target.value }))}
-                                            required
-                                        />
-                                    </div>
+                                    <Label>ID Card Number</Label>
+                                    <Input
+                                        placeholder="MED123456"
+                                        value={signupForm.idCardNumber}
+                                        onChange={(e) => setSignupForm(prev => ({ ...prev, idCardNumber: e.target.value }))}
+                                        required
+                                    />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="email">Email</Label>
-                                    <div className="relative">
-                                        <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                        <Input
-                                            id="email"
-                                            type="email"
-                                            placeholder="doctor@hospital.com"
-                                            className="pl-10"
-                                            value={signupForm.email}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, email: e.target.value }))}
-                                            required
-                                        />
-                                    </div>
+                                    <Label>Email</Label>
+                                    <Input
+                                        type="email"
+                                        placeholder="doctor@hospital.com"
+                                        value={signupForm.email}
+                                        onChange={(e) => setSignupForm(prev => ({ ...prev, email: e.target.value }))}
+                                        required
+                                    />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="password">Password</Label>
-                                    <div className="relative">
-                                        <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                        <Input
-                                            id="password"
-                                            type="password"
-                                            placeholder="••••••••"
-                                            className="pl-10"
-                                            value={signupForm.password}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, password: e.target.value }))}
-                                            required
-                                            minLength={6}
-                                        />
-                                    </div>
+                                    <Label>Password</Label>
+                                    <Input
+                                        type="password"
+                                        placeholder="••••••••"
+                                        value={signupForm.password}
+                                        onChange={(e) => setSignupForm(prev => ({ ...prev, password: e.target.value }))}
+                                        required
+                                    />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="confirmPassword">Confirm Password</Label>
-                                    <div className="relative">
-                                        <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                        <Input
-                                            id="confirmPassword"
-                                            type="password"
-                                            placeholder="••••••••"
-                                            className="pl-10"
-                                            value={signupForm.confirmPassword}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                                            required
-                                            minLength={6}
-                                        />
-                                    </div>
+                                    <Label>Confirm Password</Label>
+                                    <Input
+                                        type="password"
+                                        placeholder="••••••••"
+                                        value={signupForm.confirmPassword}
+                                        onChange={(e) => setSignupForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                                        required
+                                    />
                                 </div>
                             </div>
 
+                            {/* WORKING DAYS */}
                             <div className="space-y-2">
-                                <Label className="flex items-center gap-2">
-                                    <Calendar className="h-4 w-4" />
-                                    Working Days
-                                </Label>
+                                <Label>Working Days</Label>
                                 <div className="grid grid-cols-4 gap-2">
                                     {weekDays.map(day => (
                                         <Button
