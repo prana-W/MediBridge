@@ -2,6 +2,7 @@ import { ApiError, ApiResponse, asyncHandler } from '../../utility/index.js';
 import Doctor from '../../models/doctor.model.js';
 import statusCode from '../../constants/statusCode.js';
 import cookieOptions from '../../constants/cookieOptions.js';
+import jwt from "jsonwebtoken";
 
 const signupDoctor = asyncHandler(async (req, res) => {
     const {
@@ -9,10 +10,8 @@ const signupDoctor = asyncHandler(async (req, res) => {
         department,
         hospital,
         idCardNumber,
-        workingHours,
         workingDays,
         email,
-        phoneNumber,
         password,
     } = req?.body;
 
@@ -21,23 +20,21 @@ const signupDoctor = asyncHandler(async (req, res) => {
         !department ||
         !hospital ||
         !idCardNumber ||
-        !workingHours ||
         !workingDays ||
         !email ||
-        !phoneNumber ||
         !password
     ) {
         throw new ApiError(statusCode.BAD_REQUEST, 'All fields are required!');
     }
 
     const existingDoctor = await Doctor.findOne({
-        $or: [{ email }, { phoneNumber }],
+        $or: [{ email }],
     });
 
     if (existingDoctor) {
         throw new ApiError(
             statusCode.CONFLICT,
-            'Doctor already exists. Try different email, phone, or ID card.'
+            'Doctor already exists. Try different email, or ID card.'
         );
     }
 
@@ -46,10 +43,8 @@ const signupDoctor = asyncHandler(async (req, res) => {
         department,
         hospital,
         idCardNumber,
-        workingHours,
         workingDays,
         email,
-        phoneNumber,
         password,
     });
 
@@ -63,16 +58,15 @@ const signupDoctor = asyncHandler(async (req, res) => {
 });
 
 const loginDoctor = asyncHandler(async (req, res) => {
-    const { email, phoneNumber, password } = req?.body;
+    const { email, password } = req?.body;
 
-    if ((!email && !phoneNumber) || !password) {
+    if ((!email) || !password) {
         throw new ApiError(statusCode.BAD_REQUEST, 'Email/Phone and password are required!');
     }
 
     const doctor = await Doctor.findOne({
-        $or: [{ email }, { phoneNumber }],
-    });
-
+        $or: [{ email }],
+    }).select('+password');
     if (!doctor) {
         throw new ApiError(statusCode.NOT_FOUND, 'Doctor not found!');
     }
@@ -82,17 +76,13 @@ const loginDoctor = asyncHandler(async (req, res) => {
         throw new ApiError(statusCode.UNAUTHORIZED, 'Incorrect password!');
     }
 
-    const refreshToken = await doctor.generateAndUpdateRefreshToken(doctor?._id);
-    const accessToken = await doctor.generateAccessTokenFromRefreshToken(refreshToken);
-
-    if (!refreshToken || !accessToken) {
-        throw new ApiError(statusCode.INTERNAL_SERVER_ERROR, 'Token generation failed.');
-    }
+    const accessToken = jwt.sign({
+        _id: doctor?._id
+    }, process.env.ACCESS_TOKEN_SECRET);
 
     return res
         .status(statusCode.OK)
         .cookie('accessToken', accessToken, cookieOptions)
-        .cookie('refreshToken', refreshToken, cookieOptions)
         .json(
             new ApiResponse(statusCode.OK, 'Doctor logged in successfully.', {
                 name: doctor?.name,

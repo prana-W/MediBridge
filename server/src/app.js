@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import doctorAuthRoutes from "./routes/doctor.routes.js";
 import patientAuthRoutes from "./routes/patient.routes.js";
 import visitorsRouter from './routes/visitors.routes.js';
+import hospitalsRouter from './routes/hospital.routes.js';
 
 const app = express();
 
@@ -29,11 +30,13 @@ app.use(cookieParser());
 
 // API Routes
 
+// Todo: Protect all the routes!!!
 app.get('/', checkHealth);
 app.get('/api/v1/check-health', checkHealth);
 app.use('/api/v1/auth/doctor', doctorAuthRoutes);
 app.use('/api/v1/auth/patient', patientAuthRoutes);
 app.use('/api/v1/visitors', visitorsRouter);
+app.use('/api/v1/hospital', hospitalsRouter);
 
 // app.use('/admin', adminRouter);
 

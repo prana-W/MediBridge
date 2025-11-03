@@ -41,10 +41,6 @@ const doctorSchema = new mongoose.Schema(
             trim: true,
         },
 
-        workingHours: {
-            start: { type: String, required: true }, // e.g. "09:00"
-            end: { type: String, required: true },   // e.g. "17:00"
-        },
 
         workingDays: {
             type: [String], // e.g. ["monday", "tuesday"]
@@ -58,13 +54,6 @@ const doctorSchema = new mongoose.Schema(
             unique: true,
             trim: true,
             lowercase: true,
-        },
-
-        phoneNumber: {
-            type: String,
-            required: true,
-            unique: true,
-            trim: true,
         },
 
         password: {
@@ -105,34 +94,6 @@ doctorSchema.methods.generateAndUpdateRefreshToken = async function () {
             statusCode.INTERNAL_SERVER_ERROR,
             'Error generating refresh token'
         );
-    }
-};
-
-doctorSchema.statics.generateAccessTokenFromRefreshToken = async function (refreshToken) {
-    try {
-        const verified = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-
-        if (!verified) {
-            throw new ApiError(statusCode.BAD_REQUEST, 'Invalid refresh token');
-        }
-
-        const doctor = await this.findById(verified.doctorId).select('-password -refreshToken -__v');
-        if (!doctor) {
-            throw new ApiError(statusCode.NOT_FOUND, 'Doctor not found');
-        }
-
-        const payload = {
-            doctorId: doctor._id,
-            name: doctor.name,
-            email: doctor.email,
-            department: doctor.department,
-        };
-
-        return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
-        });
-    } catch (error) {
-        throw new ApiError(statusCode.UNAUTHORIZED, 'Invalid or expired refresh token');
     }
 };
 
