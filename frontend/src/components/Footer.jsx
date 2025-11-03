@@ -47,16 +47,16 @@ export default function MediBridgeFooter() {
 
   const teamMembers = [
     {
-      name: 'Team Member 1',
-      role: 'Full Stack Developer',
-      github: 'https://github.com/member1',
-      linkedin: 'https://www.linkedin.com/in/member1'
+      name: 'Ashutosh Kumar',
+      role: 'Frontend Developer',
+      github: 'https://github.com/ashutoshkrrawat',
+      linkedin: 'https://www.linkedin.com/in/ashutosh-kumar-rawat-138a88345/'
     },
     {
-      name: 'Team Member 2',
-      role: 'Full Stack Developer',
-      github: 'https://github.com/member2',
-      linkedin: 'https://www.linkedin.com/in/member2'
+      name: 'Pranaw Kumar',
+      role: 'Backend Developer',
+      github: 'https://github.com/prana-W',
+      linkedin: 'https://www.linkedin.com/in/pranaw-kumar-710331215/'
     }
   ];
 
@@ -180,8 +180,8 @@ export default function MediBridgeFooter() {
                     border: '1px solid rgba(255, 255, 255, 0.2)'
                   }}
                 >
-                  <h5 className="font-semibold text-lg mb-1">{member.name}</h5>
-                  <p className="text-sm opacity-80 mb-4">{member.role}</p>
+                  <h5 className="font-bold text-lg mb-1">{member.name}</h5>
+                  <p className="text-med opacity-100 mb-4">{member.role}</p>
                   <div className="flex space-x-3">
                     <a href={member.github} target="_blank" rel="noopener noreferrer">
                       <Github className="h-5 w-5" />

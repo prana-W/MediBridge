@@ -47,7 +47,7 @@ const Dictaphone = () => {
         prevTranscriptRef.current = '';
         SpeechRecognition.startListening({
             continuous: true,
-            language: 'en-US'
+            language: 'hi-IN'
         });
     };
 
