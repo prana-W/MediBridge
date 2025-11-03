@@ -8,6 +8,7 @@ import doctorAuthRoutes from './routes/doctor.routes.js';
 import patientAuthRoutes from './routes/patient.routes.js';
 import visitorsRouter from './routes/visitors.routes.js';
 import hospitalsRouter from './routes/hospital.routes.js';
+import aiRouter from "./routes/aiRouter.routes.js";
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/v1/auth/doctor', doctorAuthRoutes);
 app.use('/api/v1/auth/patient', patientAuthRoutes);
 app.use('/api/v1/visitors', visitorsRouter);
 app.use('/api/v1/hospital', hospitalsRouter);
+app.use('/api/v1/ai', aiRouter);
 
 // app.use('/admin', adminRouter);
 

@@ -11,6 +11,7 @@ SelectValue,
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import VoiceAssistant from "@/components/voiceAssistant.jsx"
 
 export default function PatientDashboard() {
 const [hospitals, setHospitals] = useState([]);
@@ -182,6 +183,7 @@ try {
 
 return (
 <div className="min-h-screen flex items-center justify-center bg-[#F2F2F2] p-6">
+<VoiceAssistant/>
     <Card className="w-full max-w-2xl shadow-xl rounded-2xl bg-white">
         <CardHeader>
             <h2 className="text-2xl font-semibold text-[#333333] text-center">
