@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { ApiError } from '../utility/index.js';
+import {ApiError} from '../utility/index.js';
 import statusCode from '../constants/statusCode.js';
 
 const patientSchema = new mongoose.Schema(
@@ -30,10 +30,10 @@ const patientSchema = new mongoose.Schema(
             type: String,
             required: true,
             lowercase: true,
-            trim: true
-        }
+            trim: true,
+        },
     },
-    { timestamps: true }
+    {timestamps: true}
 );
 
 patientSchema.pre('save', async function (next) {
@@ -42,22 +42,27 @@ patientSchema.pre('save', async function (next) {
     next();
 });
 
-patientSchema.methods.generateAndUpdateRefreshToken = async function (patientId) {
+patientSchema.methods.generateAndUpdateRefreshToken = async function (
+    patientId
+) {
     try {
         const refreshToken = jwt.sign(
-            { patientId },
+            {patientId},
             process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
+            {expiresIn: process.env.REFRESH_TOKEN_EXPIRY}
         );
 
         const patient = await Patient.findByIdAndUpdate(
             patientId,
-            { refreshToken },
-            { new: true }
+            {refreshToken},
+            {new: true}
         );
 
         if (!patient) {
-            throw new ApiError(statusCode.BAD_REQUEST, 'Patient not found while creating refresh token');
+            throw new ApiError(
+                statusCode.BAD_REQUEST,
+                'Patient not found while creating refresh token'
+            );
         }
 
         return refreshToken;
@@ -66,26 +71,37 @@ patientSchema.methods.generateAndUpdateRefreshToken = async function (patientId)
     }
 };
 
-patientSchema.methods.generateAccessTokenFromRefreshToken = async (refreshToken) => {
+patientSchema.methods.generateAccessTokenFromRefreshToken = async (
+    refreshToken
+) => {
     try {
-        const verifiedRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-
-        if (!verifiedRefreshToken) {
-            throw new ApiError(statusCode.BAD_REQUEST, 'Invalid or expired refresh token');
-        }
-
-        const patient = await Patient.findById(verifiedRefreshToken?.patientId).select(
-            '-password -refreshToken -__v'
+        const verifiedRefreshToken = jwt.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET
         );
 
+        if (!verifiedRefreshToken) {
+            throw new ApiError(
+                statusCode.BAD_REQUEST,
+                'Invalid or expired refresh token'
+            );
+        }
+
+        const patient = await Patient.findById(
+            verifiedRefreshToken?.patientId
+        ).select('-password -refreshToken -__v');
+
         if (!patient) {
-            throw new ApiError(statusCode.BAD_REQUEST, 'Patient not found while generating access token');
+            throw new ApiError(
+                statusCode.BAD_REQUEST,
+                'Patient not found while generating access token'
+            );
         }
 
         const payload = {
             patientId: patient?._id,
             name: patient?.name,
-            phoneNumber: patient?.phoneNumber
+            phoneNumber: patient?.phoneNumber,
         };
 
         return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {

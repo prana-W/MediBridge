@@ -1,8 +1,8 @@
-import { ApiError, ApiResponse, asyncHandler } from '../../utility/index.js';
+import {ApiError, ApiResponse, asyncHandler} from '../../utility/index.js';
 import Doctor from '../../models/doctor.model.js';
 import statusCode from '../../constants/statusCode.js';
 import cookieOptions from '../../constants/cookieOptions.js';
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 const signupDoctor = asyncHandler(async (req, res) => {
     const {
@@ -28,7 +28,7 @@ const signupDoctor = asyncHandler(async (req, res) => {
     }
 
     const existingDoctor = await Doctor.findOne({
-        $or: [{ email }],
+        $or: [{email}],
     });
 
     if (existingDoctor) {
@@ -58,14 +58,17 @@ const signupDoctor = asyncHandler(async (req, res) => {
 });
 
 const loginDoctor = asyncHandler(async (req, res) => {
-    const { email, password } = req?.body;
+    const {email, password} = req?.body;
 
-    if ((!email) || !password) {
-        throw new ApiError(statusCode.BAD_REQUEST, 'Email/Phone and password are required!');
+    if (!email || !password) {
+        throw new ApiError(
+            statusCode.BAD_REQUEST,
+            'Email/Phone and password are required!'
+        );
     }
 
     const doctor = await Doctor.findOne({
-        $or: [{ email }],
+        $or: [{email}],
     }).select('+password');
     if (!doctor) {
         throw new ApiError(statusCode.NOT_FOUND, 'Doctor not found!');
@@ -76,9 +79,12 @@ const loginDoctor = asyncHandler(async (req, res) => {
         throw new ApiError(statusCode.UNAUTHORIZED, 'Incorrect password!');
     }
 
-    const accessToken = jwt.sign({
-        _id: doctor?._id
-    }, process.env.ACCESS_TOKEN_SECRET);
+    const accessToken = jwt.sign(
+        {
+            _id: doctor?._id,
+        },
+        process.env.ACCESS_TOKEN_SECRET
+    );
 
     return res
         .status(statusCode.OK)
@@ -95,7 +101,10 @@ const logoutDoctor = asyncHandler(async (req, res) => {
     const doctor = await Doctor.findById(req?.doctorId);
 
     if (!doctor) {
-        throw new ApiError(statusCode.NOT_FOUND, 'Doctor not found! Please login first.');
+        throw new ApiError(
+            statusCode.NOT_FOUND,
+            'Doctor not found! Please login first.'
+        );
     }
 
     doctor.refreshToken = null;
@@ -103,9 +112,11 @@ const logoutDoctor = asyncHandler(async (req, res) => {
 
     return res
         .status(statusCode.OK)
-        .cookie('accessToken', '', { ...cookieOptions, maxAge: 0 })
-        .cookie('refreshToken', '', { ...cookieOptions, maxAge: 0 })
-        .json(new ApiResponse(statusCode.OK, 'Doctor logged out successfully.'));
+        .cookie('accessToken', '', {...cookieOptions, maxAge: 0})
+        .cookie('refreshToken', '', {...cookieOptions, maxAge: 0})
+        .json(
+            new ApiResponse(statusCode.OK, 'Doctor logged out successfully.')
+        );
 });
 
-export { signupDoctor, loginDoctor, logoutDoctor };
+export {signupDoctor, loginDoctor, logoutDoctor};
