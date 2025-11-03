@@ -57,3 +57,17 @@ const Dictaphone = () => {
             <button onClick={startContinuousListening}>Start</button>
             <button onClick={SpeechRecognition.stopListening}>Stop</button>
             <button onClick={resetTranscript}>Reset</button>
+            <p style={{
+                border: '1px solid #ccc',
+                padding: '10px',
+                minHeight: '50px',
+                marginTop: '10px',
+                backgroundColor: '#f9f9f9'
+            }}>
+                {transcript || 'Start speaking...'}
+            </p>
+        </div>
+    );
+};
+
+export default Dictaphone;
