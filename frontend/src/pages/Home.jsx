@@ -104,14 +104,14 @@ export default function MediBridgeHome() {
                   <Button 
                     className="flex-1 text-white font-semibold py-5 rounded-lg hover:opacity-90 transition-opacity"
                     style={{ backgroundColor: '#4A90E2' }}
-                    onClick={() => window.location.href = '/patient/login'}
+                    onClick={() => window.location.href = '/patient/auth'}
                   >
                     Login
                   </Button>
                   <Button 
                     className="flex-1 text-white font-semibold py-5 rounded-lg hover:opacity-90 transition-opacity"
                     style={{ backgroundColor: '#4A90E2' }}
-                    onClick={() => window.location.href = '/patient/signup'}
+                    onClick={() => window.location.href = '/patient/auth'}
                   >
                     Register
                   </Button>
@@ -157,14 +157,14 @@ export default function MediBridgeHome() {
                   <Button 
                     className="flex-1 text-white font-semibold py-5 rounded-lg hover:opacity-90 transition-opacity"
                     style={{ backgroundColor: '#4AD2CC' }}
-                    onClick={() => window.location.href = '/doctor/login'}
+                    onClick={() => window.location.href = '/doctor/auth'}
                   >
                     Login
                   </Button>
                   <Button 
                     className="flex-1 text-white font-semibold py-5 rounded-lg hover:opacity-90 transition-opacity"
                     style={{ backgroundColor: '#4AD2CC' }}
-                    onClick={() => window.location.href = '/doctor/signup'}
+                    onClick={() => window.location.href = '/doctor/auth'}
                   >
                     Register
                   </Button>
