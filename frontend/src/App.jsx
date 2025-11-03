@@ -3,7 +3,8 @@ import ErrorBoundary from './components/ErrorBoundary.jsx';
 import { ThemeProvider } from "@/components/theme-provider"
 import Layout from './Layout.jsx';
 import MediBridgeHome from './pages/Home.jsx';
-
+import DoctorSignup from './pages/Doctor/SignUp.jsx';
+import DoctorLogin from './pages/Doctor/Login.jsx';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -20,6 +21,14 @@ const router = createBrowserRouter([
                 element: <About />,
             },
             {
+                path: 'doctor/signup',
+                element: <DoctorSignup />,
+            },
+            {
+                path: 'doctor/login',
+                element: <DoctorLogin />,
+            },
+            {
                 path: '*',
                 element: <NotFound />,
             },
@@ -29,7 +38,7 @@ const router = createBrowserRouter([
 
 function App() {
     return (
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <ErrorBoundary>
             <RouterProvider router={router} />
         </ErrorBoundary>
