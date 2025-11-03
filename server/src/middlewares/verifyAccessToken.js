@@ -8,6 +8,8 @@ const verifyAccessToken = async (req, res, next) => {
     try {
         const accessToken = req?.cookies?.accessToken;
 
+        console.log(req?.cookies);
+
         if (!accessToken || accessToken === 'null') {
             throw new ApiError(
                 statusCode.UNAUTHORIZED,
