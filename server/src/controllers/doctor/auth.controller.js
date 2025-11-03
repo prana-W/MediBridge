@@ -1,4 +1,4 @@
-import { ApiError, ApiResponse, asyncHandler } from '../utility/index.js';
+import { ApiError, ApiResponse, asyncHandler } from '../../utility/index.js';
 import Doctor from '../../models/doctor.model.js';
 import statusCode from '../../constants/statusCode.js';
 import cookieOptions from '../../constants/cookieOptions.js';
