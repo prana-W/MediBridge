@@ -4,8 +4,8 @@ import cookieParser from 'cookie-parser';
 import checkHealth from './controllers/checkHealth.controller.js';
 import {errorHandler, verifyAccessToken} from './middlewares/index.js';
 import morgan from 'morgan';
-import doctorAuthRoutes from "./routes/doctor.routes.js";
-import patientAuthRoutes from "./routes/patient.routes.js";
+import doctorAuthRoutes from './routes/doctor.routes.js';
+import patientAuthRoutes from './routes/patient.routes.js';
 import visitorsRouter from './routes/visitors.routes.js';
 import hospitalsRouter from './routes/hospital.routes.js';
 
@@ -39,7 +39,6 @@ app.use('/api/v1/visitors', visitorsRouter);
 app.use('/api/v1/hospital', hospitalsRouter);
 
 // app.use('/admin', adminRouter);
-
 
 // Error Handling
 app.use(errorHandler());

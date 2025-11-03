@@ -15,7 +15,7 @@ const hospitalSchema = new mongoose.Schema(
             trim: true,
         },
     },
-    { timestamps: true }
+    {timestamps: true}
 );
 
 const Hospital = mongoose.model('Hospital', hospitalSchema);

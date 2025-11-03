@@ -1,6 +1,8 @@
 import {Router} from 'express';
 import {
-    signupPatient, loginPatient, logoutPatient
+    signupPatient,
+    loginPatient,
+    logoutPatient,
 } from '../controllers/patient/auth.controller.js';
 import {verifyAccessToken} from '../middlewares/index.js';
 

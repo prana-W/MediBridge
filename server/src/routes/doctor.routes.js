@@ -1,9 +1,12 @@
 import {Router} from 'express';
 import {
-    signupDoctor, loginDoctor, logoutDoctor
+    signupDoctor,
+    loginDoctor,
+    logoutDoctor,
 } from '../controllers/doctor/auth.controller.js';
 import {verifyAccessToken} from '../middlewares/index.js';
-import getDoctors from "../controllers/doctor/getDoctor.js";
+import getSlots from '../controllers/doctor/getSlots.js';
+import {bookSlot} from '../controllers/doctor/bookSlot.js';
 
 const authRouter = Router();
 
@@ -11,6 +14,7 @@ authRouter.route('/signup').post(signupDoctor);
 authRouter.route('/login').post(loginDoctor);
 authRouter.route('/logout').post(verifyAccessToken, logoutDoctor);
 
-authRouter.route('/getDoctors').post(getDoctors);
+authRouter.route('/getSlots').post(getSlots);
+authRouter.route('/bookSlot').post(bookSlot);
 
 export default authRouter;

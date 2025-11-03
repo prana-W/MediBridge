@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { ApiError } from '../utility/index.js';
+import {ApiError} from '../utility/index.js';
 import statusCode from '../constants/statusCode.js';
 
 const doctorSchema = new mongoose.Schema(
@@ -41,7 +41,6 @@ const doctorSchema = new mongoose.Schema(
             trim: true,
         },
 
-
         workingDays: {
             type: [String], // e.g. ["monday", "tuesday"]
             required: true,
@@ -67,8 +66,24 @@ const doctorSchema = new mongoose.Schema(
             type: String,
             select: false,
         },
+        currSlot: {
+            type: Number,
+            default: 0,
+            min: 0,
+            max: 10,
+            validate: {
+                validator: function (v) {
+                    return v >= 0 && v <= 10;
+                },
+                message: 'Slots must be between 0 and 10',
+            },
+        },
+        currDate: {
+            type: Date,
+            default: Date.now,
+        },
     },
-    { timestamps: true }
+    {timestamps: true}
 );
 
 doctorSchema.pre('save', async function (next) {
@@ -80,13 +95,13 @@ doctorSchema.pre('save', async function (next) {
 doctorSchema.methods.generateAndUpdateRefreshToken = async function () {
     try {
         const refreshToken = jwt.sign(
-            { doctorId: this._id },
+            {doctorId: this._id},
             process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
+            {expiresIn: process.env.REFRESH_TOKEN_EXPIRY}
         );
 
         this.refreshToken = refreshToken;
-        await this.save({ validateBeforeSave: false });
+        await this.save({validateBeforeSave: false});
 
         return refreshToken;
     } catch (error) {
@@ -99,6 +114,33 @@ doctorSchema.methods.generateAndUpdateRefreshToken = async function () {
 
 doctorSchema.methods.comparePassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
+};
+
+doctorSchema.methods.checkAndResetSlots = function () {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize to start of day
+
+    const docDate = new Date(this.currDate);
+    docDate.setHours(0, 0, 0, 0);
+
+    if (today.getTime() !== docDate.getTime()) {
+        this.currSlot = 0;
+        this.currDate = today;
+    }
+};
+
+doctorSchema.methods.bookSlot = async function () {
+    this.checkAndResetSlots();
+
+    // Check if slots are full
+    if (this.currSlot >= 10) {
+        throw new Error('All slots are booked for today');
+    }
+
+    this.currSlot += 1;
+    await this.save();
+
+    return this.currSlot;
 };
 
 const Doctor = mongoose.model('Doctor', doctorSchema);

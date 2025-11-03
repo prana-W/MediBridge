@@ -1,8 +1,9 @@
 import express from 'express';
 import {
-    getHospitalsByState, getAllHospital
+    getHospitalsByState,
+    getAllHospital,
 } from '../controllers/hospital.controller.js';
-import {verifyAccessToken} from "../middlewares/index.js";
+import {verifyAccessToken} from '../middlewares/index.js';
 
 const hospitalRouter = express.Router();
 
