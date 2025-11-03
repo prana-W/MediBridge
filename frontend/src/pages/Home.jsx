@@ -3,6 +3,58 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Heart, Stethoscope, Users, Activity } from 'lucide-react';
 
+// Loader Component
+function Loader() {
+    return (
+      <div className="relative w-full h-16 flex items-center justify-center overflow-visible">
+        {/* Faint baseline */}
+        <div className="absolute w-full h-[2px] bg-gray-300 rounded-full top-1/2 -translate-y-1/2"></div>
+  
+        {/* Animated ECG line */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 150 40"
+          preserveAspectRatio="none"
+          className="w-[120%] h-16 stroke-[#4AD2CC]"
+        >
+          <polyline
+            fill="none"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray="220"
+            strokeDashoffset="220"
+            points="
+              0,20
+              20,20
+              25,15
+              30,25
+              40,20
+              60,20
+              65,5
+              70,35
+              75,20
+              95,20
+              100,15
+              110,20
+              150,20
+            "
+          >
+            <animate
+              attributeName="stroke-dashoffset"
+              values="220;0"
+              dur="1.6s"
+              repeatCount="indefinite"
+            />
+          </polyline>
+        </svg>
+      </div>
+    );
+  }  
+  
+  
+  
+
 export default function MediBridgeHome() {
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F2F2F2' }}>
@@ -46,9 +98,19 @@ export default function MediBridgeHome() {
             <div className="mb-6 flex justify-center">
               <Activity className="h-16 w-16" style={{ color: '#4AD2CC' }} />
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6" style={{ color: '#333333' }}>
-              Connecting Patients and Doctors Seamlessly
-            </h1>
+            
+            {/* Heading with Loader Animation Behind */}
+            <div className="relative mb-6">
+              {/* Loader animation positioned behind the text */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-100% opacity-100% pointer-events-none">
+                <Loader />
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold relative z-10" style={{ color: '#333333' }}>
+                Connecting Patients and Doctors Seamlessly
+              </h1>
+            </div>
+            
             <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto" style={{ color: '#333333', opacity: 0.8 }}>
               MediBridge is your trusted healthcare platform that brings quality medical care to your fingertips. 
               Experience hassle-free appointments, secure consultations, and comprehensive health management all in one place.

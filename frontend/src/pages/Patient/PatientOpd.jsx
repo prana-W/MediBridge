@@ -73,7 +73,7 @@ export default function PatientDashboard() {
             }),
           });
 
-          const result = await res.json();
+          const result = await res.json(); 
           if (res.ok) {
             setBookingStatus(`✅ ${result.message || "Selection successful"}`);
           } else {
