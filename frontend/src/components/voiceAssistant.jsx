@@ -66,7 +66,7 @@ const Dictaphone = () => {
         if (!transcript.trim()) return toast.error("Please say something first.");
 
         try {
-            const { message, success, data } = await api.post("/api/interpret", {
+            const { message, success, data } = await api.post("/ai/interpret", {
                 transcript: transcript,
             });
 
