@@ -1,8 +1,8 @@
-import {Home, About, NotFound, Test} from './pages';
+import {Home, About, NotFound} from './pages';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import { ThemeProvider } from "@/components/theme-provider"
 import Layout from './Layout.jsx';
-
+import MediBridgeHome from './pages/Home.jsx';
 
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '',
-                element: <Home />,
+                element: <MediBridgeHome />,
             },
             {
                 path: 'about',
