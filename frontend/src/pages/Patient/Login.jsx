@@ -22,14 +22,12 @@ export default function PatientAuth() {
 
     const [loginForm, setLoginForm] = useState({
         phoneNumber: "",
-        aadharNumber: "",
         password: "",
     });
 
     const [signupForm, setSignupForm] = useState({
         name: "",
         phoneNumber: "",
-        aadharNumber: "",
         password: "",
         confirmPassword: "",
         state: "",
@@ -139,21 +137,19 @@ export default function PatientAuth() {
                         // ------------------ LOGIN FORM ------------------
                         <form onSubmit={handleLoginSubmit} className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="phone">Phone Number or Aadhaar</Label>
+                                <Label htmlFor="phone">Phone Number</Label>
                                 <div className="relative">
                                     <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                     <Input
                                         id="phone"
-                                        placeholder="Enter phoneNumber or Aadhaar"
+                                        placeholder="Enter phoneNumber"
                                         className="pl-10"
-                                        value={loginForm.phoneNumber || loginForm.aadharNumber}
+                                        value={loginForm.phoneNumber}
                                         onChange={(e) => {
                                             const val = e.target.value;
-                                            if (/^\d{12}$/.test(val)) {
-                                                setLoginForm((prev) => ({ ...prev, aadharNumber: val, phoneNumber: "" }));
-                                            } else {
-                                                setLoginForm((prev) => ({ ...prev, phoneNumber: val, aadharNumber: "" }));
-                                            }
+
+                                                setLoginForm((prev) => ({ ...prev, phoneNumber: val}));
+
                                         }}
                                         required
                                     />
@@ -224,22 +220,6 @@ export default function PatientAuth() {
                                     </div>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <Label htmlFor="aadhar">Aadhaar Number</Label>
-                                    <div className="relative">
-                                        <CreditCard className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                        <Input
-                                            id="aadhar"
-                                            placeholder="123412341234"
-                                            className="pl-10"
-                                            value={signupForm.aadharNumber}
-                                            onChange={(e) =>
-                                                setSignupForm((prev) => ({ ...prev, aadharNumber: e.target.value }))
-                                            }
-                                            required
-                                        />
-                                    </div>
-                                </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="state">State</Label>

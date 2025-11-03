@@ -17,12 +17,6 @@ const patientSchema = new mongoose.Schema(
             unique: true,
             match: [/^[6-9]\d{9}$/, 'Invalid phone number'],
         },
-        aadharNumber: {
-            type: String,
-            required: true,
-            unique: true,
-            match: [/^\d{12}$/, 'Aadhar number must be 12 digits'],
-        },
         password: {
             type: String,
             required: true,
@@ -91,8 +85,7 @@ patientSchema.methods.generateAccessTokenFromRefreshToken = async (refreshToken)
         const payload = {
             patientId: patient?._id,
             name: patient?.name,
-            phoneNumber: patient?.phoneNumber,
-            aadharNumber: patient?.aadharNumber,
+            phoneNumber: patient?.phoneNumber
         };
 
         return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {

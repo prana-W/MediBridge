@@ -5,27 +5,26 @@ import cookieOptions from '../../constants/cookieOptions.js';
 import jwt from "jsonwebtoken";
 
 const signupPatient = asyncHandler(async (req, res) => {
-    const { name, phoneNumber, aadharNumber, password, state } = req?.body;
+    const { name, phoneNumber, password, state } = req?.body;
 
-    if (!name || !phoneNumber || !aadharNumber || !password || !state) {
+    if (!name || !phoneNumber || !password || !state) {
         throw new ApiError(statusCode.BAD_REQUEST, 'All fields are required!');
     }
 
     const existingPatient = await Patient.findOne({
-        $or: [{ phoneNumber }, { aadharNumber }],
+        $or: [{ phoneNumber },],
     });
 
     if (existingPatient) {
         throw new ApiError(
             statusCode.CONFLICT,
-            'Patient already exists. Try different phone number or Aadhaar.'
+            'Patient already exists. Try different phone number.'
         );
     }
 
     const patient = await Patient.create({
         name,
         phoneNumber,
-        aadharNumber,
         password,
         state
     });
@@ -40,14 +39,14 @@ const signupPatient = asyncHandler(async (req, res) => {
 });
 
 const loginPatient = asyncHandler(async (req, res) => {
-    const { phoneNumber, aadharNumber, password } = req?.body;
+    const { phoneNumber, password } = req?.body;
 
-    if ((!phoneNumber && !aadharNumber) || !password) {
-        throw new ApiError(statusCode.BAD_REQUEST, 'All fields are required!');
+    if ((!phoneNumber) || !password) {
+        throw  new ApiError(statusCode.BAD_REQUEST, 'All fields are required!');
     }
 
     const patient = await Patient.findOne({
-        $or: [{ phoneNumber }, { aadharNumber }],
+        $or: [{ phoneNumber } ],
     }).select('+password');
 
     if (!patient) {

@@ -27,7 +27,8 @@ const verifyAccessToken = async (req, res, next) => {
             );
         }
 
-        req.userId = verifiedToken?.userId;
+        req.userId = verifiedToken?._id;
+        // console.log(req.userId)
         next();
     } catch (error) {
         next(new ApiError(statusCode.UNAUTHORIZED, error));
