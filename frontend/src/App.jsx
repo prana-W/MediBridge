@@ -5,6 +5,7 @@ import Layout from './Layout.jsx';
 import MediBridgeHome from './pages/Home.jsx';
 import DoctorLogin from './pages/Doctor/Login.jsx';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import PatientLogin from './pages/Patient/Login.jsx';
 
 const router = createBrowserRouter([
     {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
             {
                 path: 'doctor/auth',
                 element: <DoctorLogin />,
+            },
+            {
+                path: 'patient/auth',
+                element: <PatientLogin />,
             },
             {
                 path: '*',
