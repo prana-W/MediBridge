@@ -111,8 +111,8 @@ export default function MediBridgeHome() {
                   </div>
 
                   {/* Heartbeat Animation */}
-                  <div className="relative mb-8">
-                    <div className="opacity-80">
+                  <div className="relative mb-5">
+                    <div className="opacity-100">
                       <Loader />
                     </div>
                   </div>
@@ -129,7 +129,7 @@ export default function MediBridgeHome() {
                   {/* Two Buttons Stacked */}
                   <div className="space-y-4 max-w-sm">
                     <Button 
-                      className="w-full text-white font-semibold py-6 text-base rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                      className="w-full text-white font-semibold py-6 text-base rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl"
                       style={{ backgroundColor: '#4A90E2' }}
                       onClick={() => window.location.href = '/patient/auth'}
                     >
@@ -137,7 +137,7 @@ export default function MediBridgeHome() {
                     </Button>
                     
                     <Button 
-                      className="w-full text-white font-semibold py-6 text-base rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                      className="w-full text-white font-semibold py-6 text-base rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl"
                       style={{ backgroundColor: '#4A90E2' }}
                       onClick={() => window.location.href = '/doctor/auth'}
                     >
