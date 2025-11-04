@@ -433,7 +433,7 @@ return (
 {/* Voice Assistant Section */}
 <div className="max-w-4xl mx-auto">
 <VoiceAssistant />
-<TextToSpeech />
+<TextToSpeech text={"This is a test speech"} />
 </div>
 </div>
 );
