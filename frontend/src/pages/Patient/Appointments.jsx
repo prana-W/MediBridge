@@ -17,7 +17,7 @@ export default function PatientAppointments() {
       setLoading(true);
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/patient/appointments`, {
         method: 'GET',
-        credentials: 'include', // Include cookies for authentication
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -36,8 +36,7 @@ export default function PatientAppointments() {
       
       const data = await response.json();
       console.log('Appointments data:', data);
-      
-      // Handle different response structures
+
       setAppointments(data?.data || data || []);
       setError(null);
     } catch (err) {
@@ -164,8 +163,8 @@ export default function PatientAppointments() {
                       <CardTitle className="text-xl font-bold mb-2" style={{ color: '#4A90E2' }}>
                         {appointment.doctor?.name || 'Doctor Name'}
                       </CardTitle>
-                      <p className="text-sm font-medium" style={{ color: '#4AD2CC' }}>
-                        {appointment.doctor?.specialization || 'Specialization'}
+                      <p className="text-sm font-medium capitalize" style={{ color: '#4AD2CC' }}>
+                        {appointment.doctor?.department || 'Department'}
                       </p>
                       <p className="text-xs mt-1" style={{ color: '#333333', opacity: 0.6 }}>
                         {appointment.doctor?.hospital || 'Hospital'}
