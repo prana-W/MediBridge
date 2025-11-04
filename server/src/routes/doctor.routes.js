@@ -7,6 +7,7 @@ import {
 import {verifyAccessToken} from '../middlewares/index.js';
 import getSlots from '../controllers/doctor/getSlots.js';
 import {bookSlot} from '../controllers/doctor/bookSlot.js';
+import {getAllAppointments} from '../controllers/doctor/appointment.controller.js';
 
 const authRouter = Router();
 
@@ -16,5 +17,7 @@ authRouter.route('/logout').post(verifyAccessToken, logoutDoctor);
 
 authRouter.route('/getSlots').post(getSlots);
 authRouter.route('/bookSlot').post(bookSlot);
+
+authRouter.route('/appointments').get(verifyAccessToken, getAllAppointments);
 
 export default authRouter;

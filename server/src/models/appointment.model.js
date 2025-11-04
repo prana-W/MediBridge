@@ -17,6 +17,7 @@ const appointmentSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        // ignore checkedAt
         checkedAt: {
             type: Date,
         },
