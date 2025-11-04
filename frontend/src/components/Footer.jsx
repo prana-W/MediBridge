@@ -168,7 +168,7 @@ export default function MediBridgeFooter() {
           </div>
 
           {/* Team Section */}
-          <div className="border-t border-white border-opacity-20 pt-8 mb-8">
+          {/* <div className="border-t border-white border-opacity-20 pt-8 mb-8">
             <h4 className="font-semibold text-lg mb-6 text-center">Our Team</h4>
             <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
               {teamMembers.map((member, index) => (
@@ -193,7 +193,7 @@ export default function MediBridgeFooter() {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Bottom Bar */}
           <div className="border-t border-white border-opacity-20 pt-6 text-center">

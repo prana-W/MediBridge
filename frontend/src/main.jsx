@@ -5,10 +5,10 @@ import {Toaster} from '@/components/ui/sonner';
 import handleError from '@/utils/errorHandler';
 import { SocketProvider } from "./context/socketContent.jsx";
 
-window.onerror = (msg, src, line, col, error) => {
-    handleError(error || msg, 'Global Error');
-    return true;
-};
+// window.onerror = (msg, src, line, col, error) => {
+//     handleError(error || msg, 'Global Error');
+//     return true;
+// };
 
 window.onunhandledrejection = (event) => {
     handleError(event.reason, 'Unhandled Promise');
