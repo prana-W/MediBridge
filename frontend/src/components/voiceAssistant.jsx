@@ -68,6 +68,7 @@ const Dictaphone = () => {
         try {
             const { message, success, data } = await api.post("/ai/interpret", {
                 transcript: transcript,
+                language: language
             });
 
             if (success) {

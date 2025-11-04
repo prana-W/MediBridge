@@ -28,36 +28,40 @@ export default function PatientAuth() {
     const [signupForm, setSignupForm] = useState({
         name: "",
         phoneNumber: "",
-        state: "",
         password: "",
         confirmPassword: "",
+        state: "",
     });
 
-    const handleLoginSubmit = (e) => {
+    // ------------------ LOGIN HANDLER ------------------
+    const handleLoginSubmit = async (e) => {
         e.preventDefault();
         setMessage({ type: "", text: "" });
         setLoading(true);
 
-        fetch(`${API_BASE_URL}/auth/patient/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(loginForm),
-        })
-            .then((response) => response.json().then((data) => ({ status: response.ok, data })))
-            .then(({ status, data }) => {
-                if (status)
-                    setMessage({ type: "success", text: data.message || "Login successful!" });
-                else setMessage({ type: "error", text: data.message || "Login failed!" });
-                setLoading(false);
-            })
-            .catch(() => {
-                setMessage({ type: "error", text: "Network error. Please try again." });
-                setLoading(false);
+        try {
+            const res = await fetch(`${API_BASE_URL}/auth/patient/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(loginForm),
             });
+
+            const data = await res.json();
+            if (res.ok) {
+                setMessage({ type: "success", text: data.message || "Login successful!" });
+            } else {
+                setMessage({ type: "error", text: data.message || "Login failed!" });
+            }
+        } catch {
+            setMessage({ type: "error", text: "Network error. Please try again." });
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleSignupSubmit = () => {
+    // ------------------ SIGNUP HANDLER ------------------
+    const handleSignupSubmit = async (e) => {
         e.preventDefault();
         setMessage({ type: "", text: "" });
 
@@ -69,55 +73,41 @@ export default function PatientAuth() {
         setLoading(true);
         const { confirmPassword, ...signupData } = signupForm;
 
-        fetch(`${API_BASE_URL}/auth/patient/signup`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(signupData),
-        })
-            .then((response) => response.json().then((data) => ({ status: response.ok, data })))
-            .then(({ status, data }) => {
-                if (status) {
-                    setMessage({
-                        type: "success",
-                        text: data.message || "Registration successful!",
-                    });
-                    setTimeout(() => setIsLogin(true), 2000);
-                } else {
-                    setMessage({ type: "error", text: data.message || "Registration failed!" });
-                }
-                setLoading(false);
-            })
-            .catch(() => {
-                setMessage({ type: "error", text: "Network error. Please try again." });
-                setLoading(false);
+        try {
+            const res = await fetch(`${API_BASE_URL}/auth/patient/signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(signupData),
             });
+
+            const data = await res.json();
+            if (res.ok) {
+                setMessage({ type: "success", text: data.message || "Registration successful!" });
+                setTimeout(() => setIsLogin(true), 2000);
+            } else {
+                setMessage({ type: "error", text: data.message || "Registration failed!" });
+            }
+        } catch {
+            setMessage({ type: "error", text: "Network error. Please try again." });
+        } finally {
+            setLoading(false);
+        }
     };
 
+    // ------------------ UI ------------------
     return (
-        <div
-            className="min-h-screen flex items-center justify-center p-4"
-            style={{ backgroundColor: "#F2F2F2" }}
-        >
-            <Card className="w-full max-w-2xl shadow-2xl border-none bg-white transition-all duration-300 hover:shadow-3xl">
-                <CardHeader className="space-y-3 pb-6">
-                    <div className="flex items-center justify-center mb-2">
-                        <div
-                            className="p-4 rounded-full transition-transform duration-300 hover:scale-110"
-                            style={{ backgroundColor: "#4AD2CC" }}
-                        >
-                            <Stethoscope className="w-10 h-10 text-white" />
+        <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center p-4">
+            <Card className="w-full max-w-2xl shadow-xl">
+                <CardHeader className="space-y-1">
+                    <div className="flex items-center justify-center mb-4">
+                        <div className="bg-purple-600 p-3 rounded-full">
+                            <Stethoscope className="w-8 h-8 text-white" />
                         </div>
                     </div>
-                    <CardTitle
-                        className="text-3xl text-center font-bold"
-                        style={{ color: "#333333" }}
-                    >
+                    <CardTitle className="text-2xl text-center">
                         {isLogin ? "Patient Login" : "Patient Registration"}
                     </CardTitle>
-                    <CardDescription
-                        className="text-center text-base"
-                        style={{ color: "#333333", opacity: 0.7 }}
-                    >
+                    <CardDescription className="text-center">
                         {isLogin
                             ? "Access your digital health records"
                             : "Create your patient account to access hospital services"}
@@ -127,16 +117,16 @@ export default function PatientAuth() {
                 <CardContent>
                     {message.text && (
                         <Alert
-                            className={`mb-6 border-none transition-all duration-300 ${
-                                message.type === "success" ? "bg-green-50" : "bg-red-50"
+                            className={`mb-4 ${
+                                message.type === "success"
+                                    ? "bg-green-50 border-green-200"
+                                    : "bg-red-50 border-red-200"
                             }`}
                         >
                             <AlertDescription
-                                className={`font-medium ${
-                                    message.type === "success"
-                                        ? "text-green-700"
-                                        : "text-red-700"
-                                }`}
+                                className={
+                                    message.type === "success" ? "text-green-800" : "text-red-800"
+                                }
                             >
                                 {message.text}
                             </AlertDescription>
@@ -144,37 +134,37 @@ export default function PatientAuth() {
                     )}
 
                     {isLogin ? (
-                        <form onSubmit={handleLoginSubmit} className="space-y-5">
+                        // ------------------ LOGIN FORM ------------------
+                        <form onSubmit={handleLoginSubmit} className="space-y-4">
                             <div className="space-y-2">
-                                <Label className="text-sm font-semibold" style={{ color: "#333333" }}>
-                                    Phone Number
-                                </Label>
+                                <Label htmlFor="phone">Phone Number</Label>
                                 <div className="relative">
-                                    <Phone className="absolute left-3 top-3 h-5 w-5" style={{ color: "#4AD2CC" }} />
+                                    <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                     <Input
-                                        placeholder="Enter phone number"
-                                        className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                        style={{ borderColor: "#E5E5E5" }}
+                                        id="phone"
+                                        placeholder="Enter phoneNumber"
+                                        className="pl-10"
                                         value={loginForm.phoneNumber}
-                                        onChange={(e) =>
-                                            setLoginForm((prev) => ({ ...prev, phoneNumber: e.target.value }))
-                                        }
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+
+                                                setLoginForm((prev) => ({ ...prev, phoneNumber: val}));
+
+                                        }}
                                         required
                                     />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Label className="text-sm font-semibold" style={{ color: "#333333" }}>
-                                    Password
-                                </Label>
+                                <Label htmlFor="password">Password</Label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-3 h-5 w-5" style={{ color: "#4AD2CC" }} />
+                                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                     <Input
+                                        id="password"
                                         type="password"
                                         placeholder="••••••••"
-                                        className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                        style={{ borderColor: "#E5E5E5" }}
+                                        className="pl-10"
                                         value={loginForm.password}
                                         onChange={(e) =>
                                             setLoginForm((prev) => ({ ...prev, password: e.target.value }))
@@ -186,26 +176,24 @@ export default function PatientAuth() {
 
                             <Button
                                 type="submit"
-                                className="w-full text-white font-semibold py-6 text-base rounded-lg transition-all duration-200 hover:opacity-90 shadow-lg"
-                                style={{ backgroundColor: "#4AD2CC" }}
+                                className="w-full bg-purple-600 hover:bg-purple-700"
                                 disabled={loading}
                             >
                                 {loading ? "Logging in..." : "Login"}
                             </Button>
                         </form>
                     ) : (
-                        <form onSubmit={handleSignupSubmit} className="space-y-5">
+                        // ------------------ SIGNUP FORM ------------------
+                        <form onSubmit={handleSignupSubmit} className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: "#333333" }}>
-                                        Full Name
-                                    </Label>
+                                    <Label htmlFor="name">Full Name</Label>
                                     <div className="relative">
-                                        <User className="absolute left-3 top-3 h-5 w-5" style={{ color: "#4A90E2" }} />
+                                        <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                         <Input
+                                            id="name"
                                             placeholder="John Doe"
-                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                            style={{ borderColor: "#E5E5E5" }}
+                                            className="pl-10"
                                             value={signupForm.name}
                                             onChange={(e) =>
                                                 setSignupForm((prev) => ({ ...prev, name: e.target.value }))
@@ -216,15 +204,13 @@ export default function PatientAuth() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: "#333333" }}>
-                                        Phone Number
-                                    </Label>
+                                    <Label htmlFor="phone">Phone Number</Label>
                                     <div className="relative">
-                                        <Phone className="absolute left-3 top-3 h-5 w-5" style={{ color: "#4A90E2" }} />
+                                        <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                         <Input
+                                            id="phone"
                                             placeholder="9876543210"
-                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                            style={{ borderColor: "#E5E5E5" }}
+                                            className="pl-10"
                                             value={signupForm.phoneNumber}
                                             onChange={(e) =>
                                                 setSignupForm((prev) => ({ ...prev, phoneNumber: e.target.value }))
@@ -234,16 +220,15 @@ export default function PatientAuth() {
                                     </div>
                                 </div>
 
+
                                 <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: "#333333" }}>
-                                        State
-                                    </Label>
+                                    <Label htmlFor="state">State</Label>
                                     <div className="relative">
-                                        <MapPin className="absolute left-3 top-3 h-5 w-5" style={{ color: "#4A90E2" }} />
+                                        <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                         <Input
-                                            placeholder="Uttar Pradesh, Maharashtra..."
-                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                            style={{ borderColor: "#E5E5E5" }}
+                                            id="state"
+                                            placeholder="Bihar, Maharashtra, etc."
+                                            className="pl-10"
                                             value={signupForm.state}
                                             onChange={(e) =>
                                                 setSignupForm((prev) => ({ ...prev, state: e.target.value }))
@@ -254,36 +239,36 @@ export default function PatientAuth() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: "#333333" }}>
-                                        Password
-                                    </Label>
+                                    <Label htmlFor="password">Password</Label>
                                     <div className="relative">
-                                        <Lock className="absolute left-3 top-3 h-5 w-5" style={{ color: "#4A90E2" }} />
+                                        <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                         <Input
+                                            id="password"
                                             type="password"
                                             placeholder="••••••••"
-                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                            style={{ borderColor: "#E5E5E5" }}
+                                            className="pl-10"
                                             value={signupForm.password}
                                             onChange={(e) =>
-                                                setSignupForm((prev) => ({ ...prev, password: e.target.value }))
+                                                setSignupForm((prev) => ({
+                                                    ...prev,
+                                                    password: e.target.value,
+                                                }))
                                             }
                                             required
+                                            minLength={6}
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: "#333333" }}>
-                                        Confirm Password
-                                    </Label>
+                                    <Label htmlFor="confirmPassword">Confirm Password</Label>
                                     <div className="relative">
-                                        <Lock className="absolute left-3 top-3 h-5 w-5" style={{ color: "#4A90E2" }} />
+                                        <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                         <Input
+                                            id="confirmPassword"
                                             type="password"
                                             placeholder="••••••••"
-                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                            style={{ borderColor: "#E5E5E5" }}
+                                            className="pl-10"
                                             value={signupForm.confirmPassword}
                                             onChange={(e) =>
                                                 setSignupForm((prev) => ({
@@ -292,6 +277,7 @@ export default function PatientAuth() {
                                                 }))
                                             }
                                             required
+                                            minLength={6}
                                         />
                                     </div>
                                 </div>
@@ -299,8 +285,7 @@ export default function PatientAuth() {
 
                             <Button
                                 type="submit"
-                                className="w-full text-white font-semibold py-6 text-base rounded-lg transition-all duration-200 hover:opacity-90 shadow-lg"
-                                style={{ backgroundColor: "#4AD2CC" }}
+                                className="w-full bg-purple-600 hover:bg-purple-700"
                                 disabled={loading}
                             >
                                 {loading ? "Creating Account..." : "Create Account"}
@@ -314,7 +299,7 @@ export default function PatientAuth() {
                         {isLogin ? "Don't have an account? " : "Already have an account? "}
                         <button
                             type="button"
-                            className="text-[#4AD2CC] hover:underline font-medium"
+                            className="text-purple-600 hover:underline font-medium"
                             onClick={() => {
                                 setIsLogin(!isLogin);
                                 setMessage({ type: "", text: "" });

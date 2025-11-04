@@ -1,7 +1,7 @@
 const cookieOptions = {
     httpOnly: true,
     secure: true,
-    sameSite: 'None',
+    sameSite: 'none',
 };
 
 export default cookieOptions;

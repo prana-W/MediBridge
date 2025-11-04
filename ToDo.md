@@ -1,0 +1,8 @@
+- Add a favicon
+- UI design
+- Add new API keys
+- Fix response not fetching
+- Make Header and Footer
+- Make a proper Readme.md and About us section
+- Make PPT
+- Make a medication page

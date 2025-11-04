@@ -1,22 +1,44 @@
-import {ApiResponse, asyncHandler} from '../utility/index.js';
-import {handleVoiceInput} from '../utility/aiModel.js';
-import statusCode from '../constants/statusCode.js';
-import {ApiError} from '@google/genai';
+import {processVoiceCommand} from '../utility/aiModel.js';
+import {ApiError, ApiResponse, asyncHandler} from '../utility/index.js';
 
 const aiController = asyncHandler(async (req, res) => {
-    const transcript = req.params?.transcript;
+    const {transcript, language} = req.body;
 
     if (!transcript) {
-        throw new ApiError(statusCode.NOT_FOUND, 'Transcript not found');
+        throw new ApiError(400, 'Transcript is required');
     }
 
-    const response = await handleVoiceInput(transcript);
+    // Extract access token from cookies or authorization header
+    const accessToken =
+        req.cookies?.accessToken ||
+        req.header('Authorization')?.replace('Bearer ', '');
 
-    if (!response) {
-        throw new ApiError(statusCode.NO_CONTENT, 'Response not found');
+    if (!accessToken) {
+        throw new ApiError(
+            401,
+            'Access token is required for booking appointments'
+        );
     }
 
-    return res.status(200).json(new ApiResponse(200, 'AI succesfully returned the response', response));
-})
+    // Base URL for your backend
+    const baseURL = process.env.SERVER_URL;
+
+    // Process the voice command with authentication
+    const response = await processVoiceCommand(
+        transcript,
+        accessToken,
+        baseURL
+    );
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                'AI successfully processed the request',
+                response
+            )
+        );
+});
 
 export {aiController};
