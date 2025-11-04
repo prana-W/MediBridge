@@ -78,6 +78,7 @@ export default function PatientAuth() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(signupData),
+                credentials: "include"
             });
 
             const data = await res.json();

@@ -163,7 +163,7 @@ Examples:
 
         // Step 3: Match hospital
         const matchedHospital = findBestHospital(
-            hospitals.data,
+            hospitals,
             analysis.hospitalMentioned
         );
 
@@ -186,6 +186,7 @@ Examples:
                 department: analysis.suggestedDepartment,
                 hospital: matchedHospital.name,
             }),
+            credentials: "include"
         });
 
         const slotsData = await slotsResponse.json();
@@ -224,6 +225,7 @@ Examples:
                 doctorId: availableDoctor._id,
                 slotNumber: availableDoctor.currentSlot,
             }),
+            credentials: "include"
         });
 
         const bookingData = await bookingResponse.json();
