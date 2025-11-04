@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Heart, Stethoscope, Users, Activity } from 'lucide-react';
+import { Heart, Stethoscope, Users, Activity, Brain, MessageSquare, Search, Clock } from 'lucide-react';
 
-// Loader Component
+// Loader Component (Heartbeat Animation)
 function Loader() {
   return (
     <div className="relative w-full h-16 flex items-center justify-center overflow-visible">
@@ -64,16 +64,16 @@ export default function MediBridgeHome() {
               </span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <button className="font-medium transition-colors hover:opacity-80" style={{ color: '#4A90E2' }}>
+              <button className="font-medium transition-all hover:opacity-80 hover:scale-105" style={{ color: '#4A90E2' }}>
                 Home
               </button>
-              <button className="font-medium transition-colors hover:opacity-80" style={{ color: '#333333' }}>
+              <button className="font-medium transition-all hover:opacity-80 hover:scale-105" style={{ color: '#333333' }}>
                 Doctor
               </button>
-              <button className="font-medium transition-colors hover:opacity-80" style={{ color: '#333333' }}>
+              <button className="font-medium transition-all hover:opacity-80 hover:scale-105" style={{ color: '#333333' }}>
                 Patient
               </button>
-              <button className="font-medium transition-colors hover:opacity-80" style={{ color: '#333333' }}>
+              <button className="font-medium transition-all hover:opacity-80 hover:scale-105" style={{ color: '#333333' }}>
                 Contact
               </button>
             </nav>
@@ -86,146 +86,195 @@ export default function MediBridgeHome() {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section with Grid Background */}
       <main className="flex-grow">
-        <section className="py-20 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-5xl mx-auto text-center">
-            <div className="mb-6 flex justify-center">
-              <Activity className="h-16 w-16" style={{ color: '#4AD2CC' }} />
-            </div>
+        <section className="relative min-h-[calc(100vh-80px)] overflow-hidden" style={{ backgroundColor: '#4AD2CC' }}>
+          {/* Grid Background Pattern */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="h-full w-full" style={{
+              backgroundImage: `linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)`,
+              backgroundSize: '50px 50px'
+            }}></div>
+          </div>
 
-            <div className="relative mb-6">
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full opacity-100 pointer-events-none">
-                <Loader />
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div className="grid md:grid-cols-2 gap-8 items-center min-h-[calc(100vh-80px)]">
+              
+              {/* Left Side - Content */}
+              <div className="relative py-12 md:py-0 flex items-center md:pl-8">
+                <div className="w-full">
+                  {/* Icon with pulse animation */}
+                  <div className="mb-6 flex justify-start">
+                    <div className="animate-pulse">
+                      <Activity className="h-16 w-16 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Heartbeat Animation */}
+                  <div className="relative mb-8">
+                    <div className="opacity-80">
+                      <Loader />
+                    </div>
+                  </div>
+
+                  {/* Main Heading */}
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                    Connecting Patients and Doctors Seamlessly
+                  </h1>
+                  
+                  <p className="text-white text-lg md:text-xl mb-8 opacity-90">
+                    MediBridge is your trusted healthcare platform that brings quality medical care to your fingertips.
+                  </p>
+                  
+                  {/* Two Buttons Stacked */}
+                  <div className="space-y-4 max-w-sm">
+                    <Button 
+                      className="w-full text-white font-semibold py-6 text-base rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                      style={{ backgroundColor: '#4A90E2' }}
+                      onClick={() => window.location.href = '/patient/auth'}
+                    >
+                      Patient Sign In / Login
+                    </Button>
+                    
+                    <Button 
+                      className="w-full text-white font-semibold py-6 text-base rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                      style={{ backgroundColor: '#4A90E2' }}
+                      onClick={() => window.location.href = '/doctor/auth'}
+                    >
+                      Doctor Sign In / Login
+                    </Button>
+                  </div>
+                </div>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold relative z-10" style={{ color: '#333333' }}>
-                Connecting Patients and Doctors Seamlessly
-              </h1>
+              {/* Right Side - Doctor Image */}
+              <div className="relative flex items-end justify-end py-0 h-full">
+                <div className="relative w-full h-full flex items-end justify-end">
+                  {/* Decorative floating card */}
+                  <div className="absolute top-20 right-20 z-30 animate-bounce" style={{ animationDuration: '3s' }}>
+                    <div className="bg-white rounded-2xl p-5 shadow-2xl">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                          <Heart className="w-6 h-6" style={{ color: '#FF6B6B' }} />
+                        </div>
+                        <div className="flex-1">
+                          <div className="h-2 bg-gray-200 rounded-full mb-2 w-24"></div>
+                          <div className="h-2 bg-gray-300 rounded-full w-16"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Doctor Image - Full Right Side */}
+                  <div className="relative z-20 w-full h-full flex items-end justify-end">
+                    <img 
+                      src="/doctorwithlaptop.png" 
+                      alt="Doctor with stethoscope and laptop" 
+                      className="w-100% h-full object-cover object-bottom drop-shadow-2xl"
+                      style={{ maxHeight: 'calc(100vh - 250px)' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
             </div>
-
-            <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto" style={{ color: '#333333', opacity: 0.8 }}>
-              MediBridge is your trusted healthcare platform that brings quality medical care to your fingertips.
-              Experience hassle-free appointments, secure consultations, and comprehensive health management all in one place.
-            </p>
-            {/* <Button
-              size="lg"
-              className="text-white font-semibold px-8 py-6 text-lg rounded-lg hover:opacity-90 transition-opacity shadow-lg"
-              style={{ backgroundColor: '#4AD2CC' }}
-            >
-              Get Started
-            </Button> */}
-          </div>
-        </section>
-
-        {/* Cards Section */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-            
-            {/* For Patients Card */}
-            <Card className="border-none shadow-xl hover:shadow-2xl transition-shadow duration-300 bg-white">
-              <CardHeader className="text-center pb-4">
-                <div className="flex justify-center mb-4">
-                  <div className="p-4 rounded-full" style={{ backgroundColor: '#4A90E2', opacity: 1 }}>
-                    <img src="/patient.png" alt="Patient" className="h-12 w-12 " />
-                  </div>
-                </div>
-                <CardTitle className="text-3xl font-bold mb-2" style={{ color: '#4A90E2' }}>
-                  For Patients
-                </CardTitle>
-                <CardDescription className="text-base" style={{ color: '#333333', opacity: 0.7 }}>
-                  Access world-class healthcare from the comfort of your home
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-center space-y-4">
-                <ul className="text-left space-y-3 mb-6" style={{ color: '#333333' }}>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4AD2CC' }}>✓</span>
-                    <span>Book appointments with verified doctors</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4AD2CC' }}>✓</span>
-                    <span>Access your medical records anytime</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4AD2CC' }}>✓</span>
-                    <span>Get online consultations and prescriptions</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4AD2CC' }}>✓</span>
-                    <span>Track your health journey with ease</span>
-                  </li>
-                </ul>
-                <div className="flex gap-3">
-                  <Button className="flex-1 text-white font-semibold py-5 rounded-lg hover:opacity-90 transition-opacity"
-                    style={{ backgroundColor: '#4A90E2' }}
-                    onClick={() => window.location.href = '/patient/auth'}>
-                    Login / Register
-                  </Button>
-                  
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* For Doctors Card */}
-            <Card className="border-none shadow-xl hover:shadow-2xl transition-shadow duration-300 bg-white">
-              <CardHeader className="text-center pb-4">
-                <div className="flex justify-center mb-4">
-                  <div className="p-4 rounded-full" style={{ backgroundColor: '#4AD2CC', opacity: 1 }}>
-                    <img src="/doctor.png" alt="Doctor" className="h-12 w-12 " />
-                  </div>
-                </div>
-                <CardTitle className="text-3xl font-bold mb-2" style={{ color: '#4AD2CC' }}>
-                  For Doctors
-                </CardTitle>
-                <CardDescription className="text-base" style={{ color: '#333333', opacity: 0.7 }}>
-                  Expand your practice and manage patients efficiently
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-center space-y-4">
-                <ul className="text-left space-y-3 mb-6" style={{ color: '#333333' }}>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4A90E2' }}>✓</span>
-                    <span>Manage appointments with ease</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4A90E2' }}>✓</span>
-                    <span>Digital prescription and record management</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4A90E2' }}>✓</span>
-                    <span>Video consultation capabilities</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4A90E2' }}>✓</span>
-                    <span>Grow your practice with our platform</span>
-                  </li>
-                </ul>
-                <div className="flex gap-3">
-                  <Button className="flex-1 text-white font-semibold py-5 rounded-lg hover:opacity-90 transition-opacity"
-                    style={{ backgroundColor: '#4AD2CC' }}
-                    onClick={() => window.location.href = '/doctor/auth'}>
-                    Login / Register
-                  </Button>
-                  
-                </div>
-              </CardContent>
-            </Card>
-
           </div>
         </section>
 
         {/* Features Section */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4" style={{ color: '#333333' }}>
+              Powerful Features for Modern Healthcare
+            </h2>
+            <p className="text-center text-lg mb-12" style={{ color: '#333333', opacity: 0.7 }}>
+              Experience seamless healthcare management with our innovative platform
+            </p>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {/* Feature 1: OPD Queue Management */}
+              <div className="text-center group hover:scale-105 transition-transform duration-300">
+                <div className="flex justify-center mb-6">
+                  <div className="p-4 rounded-2xl transition-all duration-300 group-hover:shadow-xl" style={{ backgroundColor: '#4A90E2' }}>
+                    <Clock className="h-12 w-12 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold mb-3" style={{ color: '#4A90E2' }}>
+                  Smart OPD Queue Management
+                </h3>
+                <p className="mb-4" style={{ color: '#333333', opacity: 0.7 }}>
+                  Efficient queue management powered by both manual controls and AI algorithms to minimize wait times
+                </p>
+                <div className="flex justify-center gap-2 flex-wrap">
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#4A90E220', color: '#4A90E2' }}>
+                    Manual Mode
+                  </span>
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#4AD2CC20', color: '#4AD2CC' }}>
+                    AI Powered
+                  </span>
+                </div>
+              </div>
+
+              {/* Feature 2: AI Voice Booking */}
+              <div className="text-center group hover:scale-105 transition-transform duration-300">
+                <div className="flex justify-center mb-6">
+                  <div className="p-4 rounded-2xl transition-all duration-300 group-hover:shadow-xl" style={{ backgroundColor: '#4AD2CC' }}>
+                    <MessageSquare className="h-12 w-12 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold mb-3" style={{ color: '#4AD2CC' }}>
+                  AI-Powered Voice Booking
+                </h3>
+                <p className="mb-4" style={{ color: '#333333', opacity: 0.7 }}>
+                  Simply talk to our AI assistant to book appointments - no typing, no hassle, just natural conversation
+                </p>
+                <div className="flex justify-center gap-2 flex-wrap">
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#4AD2CC20', color: '#4AD2CC' }}>
+                    Voice First
+                  </span>
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#4A90E220', color: '#4A90E2' }}>
+                    AI Assistant
+                  </span>
+                </div>
+              </div>
+
+              {/* Feature 3: Manual Selection */}
+              <div className="text-center group hover:scale-105 transition-transform duration-300">
+                <div className="flex justify-center mb-6">
+                  <div className="p-4 rounded-2xl transition-all duration-300 group-hover:shadow-xl" style={{ backgroundColor: '#4A90E2' }}>
+                    <Search className="h-12 w-12 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold mb-3" style={{ color: '#4A90E2' }}>
+                  Manual Hospital & Doctor Selection
+                </h3>
+                <p className="mb-4" style={{ color: '#333333', opacity: 0.7 }}>
+                  Prefer to choose yourself? Browse hospitals, specialists, and book appointments at your convenience
+                </p>
+                <div className="flex justify-center gap-2 flex-wrap">
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#4A90E220', color: '#4A90E2' }}>
+                    Full Control
+                  </span>
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#4AD2CC20', color: '#4AD2CC' }}>
+                    Easy Browse
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Why Choose Section */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#F2F2F2' }}>
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12" style={{ color: '#333333' }}>
               Why Choose MediBridge?
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
+              <div className="text-center group hover:scale-105 transition-transform duration-300">
                 <div className="flex justify-center mb-4">
-                  <div className="p-3 rounded-full" style={{ backgroundColor: '#4A90E2', opacity: 1 }}>
-                    <Heart className="h-8 w-8 " style={{ color: '#FF6B6B' }} />
+                  <div className="p-3 rounded-full transition-all duration-300 group-hover:shadow-lg" style={{ backgroundColor: '#4A90E2' }}>
+                    <Heart className="h-8 w-8" style={{ color: '#FF6B6B' }} />
                   </div>
                 </div>
                 <h3 className="text-xl font-semibold mb-2" style={{ color: '#4A90E2' }}>
@@ -235,10 +284,10 @@ export default function MediBridgeHome() {
                   Connect with verified healthcare professionals you can trust
                 </p>
               </div>
-              <div className="text-center">
+              <div className="text-center group hover:scale-105 transition-transform duration-300">
                 <div className="flex justify-center mb-4">
-                  <div className="p-3 rounded-full" style={{ backgroundColor: '#4AD2CC', opacity: 1 }}>
-                  <img src="/clock.png" alt="Patient" className="h-12 w-12 " />
+                  <div className="p-3 rounded-full transition-all duration-300 group-hover:shadow-lg" style={{ backgroundColor: '#4AD2CC' }}>
+                    <Clock className="h-8 w-8 text-white" />
                   </div>
                 </div>
                 <h3 className="text-xl font-semibold mb-2" style={{ color: '#4AD2CC' }}>
@@ -248,10 +297,10 @@ export default function MediBridgeHome() {
                   Healthcare support whenever and wherever you need it
                 </p>
               </div>
-              <div className="text-center">
+              <div className="text-center group hover:scale-105 transition-transform duration-300">
                 <div className="flex justify-center mb-4">
-                  <div className="p-3 rounded-full" style={{ backgroundColor: '#4A90E2', opacity: 1 }}>
-                  <img src="/tool.png" alt="Patient" className="h-12 w-12 " />
+                  <div className="p-3 rounded-full transition-all duration-300 group-hover:shadow-lg" style={{ backgroundColor: '#4A90E2' }}>
+                    <Stethoscope className="h-8 w-8 text-white" />
                   </div>
                 </div>
                 <h3 className="text-xl font-semibold mb-2" style={{ color: '#4A90E2' }}>
@@ -265,7 +314,6 @@ export default function MediBridgeHome() {
           </div>
         </section>
       </main>
-
     </div>
   );
 }
