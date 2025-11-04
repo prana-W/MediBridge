@@ -8,7 +8,10 @@ const getAllAppointments = asyncHandler(async (req, res) => {
     const appointments = await Appointment.find({
         doctor: doctorId,
         nextCheckup: { $ne: null }
-    });
+    })
+        .populate('patient')
+        .populate('doctor');
+
 
 
     if (!appointments) {
