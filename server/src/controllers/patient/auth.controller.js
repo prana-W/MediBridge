@@ -72,7 +72,6 @@ const loginPatient = asyncHandler(async (req, res) => {
     return res
         .status(statusCode.OK)
         .cookie('accessToken', accessToken, cookieOptions)
-
         .json(
             new ApiResponse(statusCode.OK, 'Patient logged in successfully.', {
                 name: patient?.name,

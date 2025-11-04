@@ -41,7 +41,7 @@ function findBestHospital(hospitals, userInput) {
     return null;
 }
 
-async function processVoiceCommand(voiceText, baseURL = '') {
+async function processVoiceCommand(voiceText, accessToken, baseURL = process.env.SERVER_URL) {
     try {
         // Step 1: Use AI to extract intent, symptoms, and hospital
         const analysisPrompt = `Analyze this patient request: "${voiceText}"
@@ -93,11 +93,16 @@ Respond in JSON format:
         }
 
         // Step 2: Fetch available hospitals
-        const hospitalsResponse = await fetch(`${baseURL}/hospitals`);
+        const hospitalsResponse = await fetch(`${process.env.SERVER_URL}/hospital`, {
+            headers: {
+                "Content-Type": "application/json",
+                Cookie: `accessToken=${accessToken}`
+            },
+        });
         const hospitals = await hospitalsResponse.json();
 
         // Step 3: Match hospital
-        const matchedHospital = findBestHospital(hospitals, analysis.hospitalMentioned);
+        const matchedHospital = findBestHospital(hospitals.data, analysis.hospitalMentioned);
 
         if (!matchedHospital) {
             const hospitalNames = hospitals.map(h => h.name).join(', ');
@@ -161,7 +166,7 @@ Respond in JSON format:
             ? `${availableDoctor.currentSlot + 8} AM`
             : `${availableDoctor.currentSlot + 8 - 12} PM`;
 
-        return {
+        const finalResponse = {
             success: true,
             message: `Appointment booked successfully! Your appointment is at ${matchedHospital.name} with Dr. ${availableDoctor.name} (${analysis.suggestedDepartment} department) at slot ${availableDoctor.currentSlot} (${timeFormat}).`,
             details: {
@@ -175,6 +180,10 @@ Respond in JSON format:
             }
         };
 
+        console.log(finalResponse)
+
+        return finalResponse;
+
     } catch (error) {
         console.error('Error processing voice command:', error);
         return {
@@ -186,9 +195,9 @@ Respond in JSON format:
 }
 
 // Example usage
-async function handleVoiceInput(voiceText, baseURL = process.env.SERVER_URL) {
+async function handleVoiceInput(voiceText, accessToken, baseURL = process.env.SERVER_URL) {
     console.log(`Processing: "${voiceText}"`);
-    const result = await processVoiceCommand(voiceText, baseURL);
+    const result = await processVoiceCommand(voiceText, accessToken, baseURL);
     console.log('Result:', result);
     return result;
 }
