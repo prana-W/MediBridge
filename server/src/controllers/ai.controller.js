@@ -30,15 +30,33 @@ const aiController = asyncHandler(async (req, res) => {
         baseURL
     );
 
-    return res
-        .status(200)
-        .json(
-            new ApiResponse(
-                response?.success,
-                response?.message,
-                response?.details
-            )
-        );
+    if (language === 'en-US') {
+
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    response?.success,
+                    response?.message,
+                    response?.details
+                )
+            );
+
+    }
+
+    else {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    response?.success,
+                    response?.message_hi,
+                    response?.details
+                )
+            );
+    }
+
+
 });
 
 export {aiController};

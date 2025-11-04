@@ -125,7 +125,9 @@ const Dictaphone = () => {
                 toast.success(message || "AI response received", {
                     duration: 10000
                 });
-                setMsg(message);
+
+                    setMsg(data?.message);
+
 
             } else {
                 toast.error(message || "Something went wrong while interpreting.");

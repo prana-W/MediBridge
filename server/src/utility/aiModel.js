@@ -247,6 +247,7 @@ Examples:
         return {
             success: true,
             message: `Appointment booked successfully! Your appointment is at ${matchedHospital.name} with Dr. ${availableDoctor.name} (${analysis.suggestedDepartment} department) at slot ${availableDoctor.currentSlot} (${timeFormat}).`,
+            message_hi: `अपॉइंटमेंट सफलतापूर्वक बुक हो गया! आपकी अपॉइंटमेंट ${matchedHospital.name} में डॉ. ${availableDoctor.name} (${analysis.suggestedDepartment} विभाग) के साथ स्लॉट ${availableDoctor.currentSlot} (${timeFormat}) पर है।`,
             details: {
                 hospital: matchedHospital.name,
                 doctor: availableDoctor.name,
@@ -256,7 +257,8 @@ Examples:
                 symptoms: analysis.symptoms,
                 reasoning: analysis.reasoning,
             },
-        };
+        }
+
     } catch (error) {
         console.error('Error processing voice command:', error);
         return {
