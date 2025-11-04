@@ -1,17 +1,17 @@
-import mongoose from "mongoose";
-import Medication from "./medication.model.js";
+import mongoose from 'mongoose';
+import Medication from './medication.model.js';
 
 const appointmentSchema = new mongoose.Schema(
     {
         patient: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
-            ref: "Patient",
+            ref: 'Patient',
         },
         doctor: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
-            ref: "Doctor",
+            ref: 'Doctor',
         },
         isCheckupComplete: {
             type: Boolean,
@@ -28,7 +28,7 @@ const appointmentSchema = new mongoose.Schema(
             {
                 medication: {
                     type: mongoose.Schema.Types.ObjectId,
-                    ref: "Medication",
+                    ref: 'Medication',
                     required: true,
                 },
                 totalDays: {
@@ -51,15 +51,18 @@ const appointmentSchema = new mongoose.Schema(
             default: false,
         },
     },
-    { timestamps: true }
+    {timestamps: true}
 );
 
-appointmentSchema.pre("save", async function (next) {
+appointmentSchema.pre('save', async function (next) {
     try {
         for (const medInfo of this.medications) {
             const medicationDoc = await Medication.findById(medInfo.medication);
             if (medicationDoc) {
-                await medicationDoc.addTablets(medInfo.totalDays, medInfo.timesPerDay);
+                await medicationDoc.addTablets(
+                    medInfo.totalDays,
+                    medInfo.timesPerDay
+                );
             }
         }
         next();
@@ -68,5 +71,5 @@ appointmentSchema.pre("save", async function (next) {
     }
 });
 
-const Appointment = mongoose.model("Appointment", appointmentSchema);
+const Appointment = mongoose.model('Appointment', appointmentSchema);
 export default Appointment;

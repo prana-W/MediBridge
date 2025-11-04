@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const medicationSchema = new mongoose.Schema(
     {
@@ -15,14 +15,17 @@ const medicationSchema = new mongoose.Schema(
             default: 0,
         },
     },
-    { timestamps: true }
+    {timestamps: true}
 );
 
-medicationSchema.methods.addTablets = function (daysOfConsumption, tabletsPerDay) {
+medicationSchema.methods.addTablets = function (
+    daysOfConsumption,
+    tabletsPerDay
+) {
     const additionalTablets = daysOfConsumption * tabletsPerDay;
     this.totalTablets += additionalTablets;
     return this.save();
 };
 
-const Medication = mongoose.model("Medication", medicationSchema);
+const Medication = mongoose.model('Medication', medicationSchema);
 export default Medication;

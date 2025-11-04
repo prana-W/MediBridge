@@ -8,10 +8,18 @@ const getAllAppointments = asyncHandler(async (req, res) => {
     const appointments = await Appointment.find({doctor: doctorId});
 
     if (!appointments) {
-        throw new ApiError(statusCode.NOT_FOUND, "No Appointment was found!");
+        throw new ApiError(statusCode.NOT_FOUND, 'No Appointment was found!');
     }
 
-    return res.status(statusCode.OK).json(new ApiResponse(statusCode.OK, 'All appointments was fetched!', appointments));
-})
+    return res
+        .status(statusCode.OK)
+        .json(
+            new ApiResponse(
+                statusCode.OK,
+                'All appointments was fetched!',
+                appointments
+            )
+        );
+});
 
-export { getAllAppointments };
+export {getAllAppointments};

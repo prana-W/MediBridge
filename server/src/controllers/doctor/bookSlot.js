@@ -1,30 +1,30 @@
-import { ApiError, ApiResponse, asyncHandler } from "../../utility/index.js";
-import statusCode from "../../constants/statusCode.js";
-import Doctor from "../../models/doctor.model.js";
-import Appointment from "../../models/appointment.model.js";
+import {ApiError, ApiResponse, asyncHandler} from '../../utility/index.js';
+import statusCode from '../../constants/statusCode.js';
+import Doctor from '../../models/doctor.model.js';
+import Appointment from '../../models/appointment.model.js';
 
 const bookSlot = asyncHandler(async (req, res) => {
-    const { doctorId, slotNumber, patientId } = req.body;
+    const {doctorId, slotNumber, patientId} = req.body;
 
     if (!doctorId || slotNumber === undefined) {
         throw new ApiError(
             statusCode.BAD_REQUEST,
-            "Doctor ID, Patient ID, and slot number are required"
+            'Doctor ID, Patient ID, and slot number are required'
         );
     }
 
     if (slotNumber < 0 || slotNumber >= 10) {
         throw new ApiError(
             statusCode.BAD_REQUEST,
-            "Invalid slot number. Must be between 0 and 9"
+            'Invalid slot number. Must be between 0 and 9'
         );
     }
 
     const doctor = await Doctor.findById(doctorId).select(
-        "-password -refreshToken"
+        '-password -refreshToken'
     );
     if (!doctor) {
-        throw new ApiError(statusCode.NOT_FOUND, "Doctor not found");
+        throw new ApiError(statusCode.NOT_FOUND, 'Doctor not found');
     }
 
     doctor.checkAndResetSlots();
@@ -39,7 +39,7 @@ const bookSlot = asyncHandler(async (req, res) => {
     if (doctor.currSlot >= 10) {
         throw new ApiError(
             statusCode.BAD_REQUEST,
-            "All slots are booked for today. Please try tomorrow."
+            'All slots are booked for today. Please try tomorrow.'
         );
     }
 
@@ -56,7 +56,7 @@ const bookSlot = asyncHandler(async (req, res) => {
     });
 
     return res.status(statusCode.OK).json(
-        new ApiResponse(statusCode.OK, "Slot booked successfully", {
+        new ApiResponse(statusCode.OK, 'Slot booked successfully', {
             doctorId: doctor._id,
             doctorName: doctor.name,
             patientId,
@@ -70,4 +70,4 @@ const bookSlot = asyncHandler(async (req, res) => {
     );
 });
 
-export { bookSlot };
+export {bookSlot};

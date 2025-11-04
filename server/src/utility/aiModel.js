@@ -186,7 +186,7 @@ Examples:
                 department: analysis.suggestedDepartment,
                 hospital: matchedHospital.name,
             }),
-            credentials: "include"
+            credentials: 'include',
         });
 
         const slotsData = await slotsResponse.json();
@@ -225,7 +225,7 @@ Examples:
                 doctorId: availableDoctor._id,
                 slotNumber: availableDoctor.currentSlot,
             }),
-            credentials: "include"
+            credentials: 'include',
         });
 
         const bookingData = await bookingResponse.json();
