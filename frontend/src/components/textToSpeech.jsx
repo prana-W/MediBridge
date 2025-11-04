@@ -1,17 +1,19 @@
-import { useState, useEffect } from 'react';
-import { Volume2, Square, Play } from 'lucide-react';
+import { useState, useEffect, useRef } from "react";
+import { Volume2, Square } from "lucide-react";
 
-export default function TextToSpeech({text}) {
+export default function TextToSpeech({ text }) {
     const [speaking, setSpeaking] = useState(false);
     const [voices, setVoices] = useState([]);
-    const [selectedVoice, setSelectedVoice] = useState('');
-    const [rate, setRate] = useState(1);
-    const [pitch, setPitch] = useState(1);
+    const [selectedVoice, setSelectedVoice] = useState("");
+    const utteranceRef = useRef(null);
 
+    const pitch = 1;
+    const rate = 1;
+
+    // 🗣️ Load available voices
     useEffect(() => {
         const loadVoices = () => {
             const availableVoices = speechSynthesis.getVoices();
-
             setVoices(availableVoices);
             if (availableVoices.length > 0 && !selectedVoice) {
                 setSelectedVoice(availableVoices[0].name);
@@ -22,20 +24,16 @@ export default function TextToSpeech({text}) {
         speechSynthesis.onvoiceschanged = loadVoices;
     }, [selectedVoice]);
 
-    const handleSpeak = () => {
-        if (!text.trim()) return;
+    // 🎯 Automatically speak whenever `text` changes
+    useEffect(() => {
+        if (!text?.trim()) return;
 
-        if (speaking) {
-            speechSynthesis.cancel();
-            setSpeaking(false);
-            return;
-        }
+        // Stop any ongoing speech
+        speechSynthesis.cancel();
 
         const utterance = new SpeechSynthesisUtterance(text);
-
-        const voice = voices.find(v => v.name === selectedVoice);
+        const voice = voices.find((v) => v.name === selectedVoice);
         if (voice) utterance.voice = voice;
-
         utterance.rate = rate;
         utterance.pitch = pitch;
 
@@ -43,39 +41,54 @@ export default function TextToSpeech({text}) {
         utterance.onend = () => setSpeaking(false);
         utterance.onerror = () => setSpeaking(false);
 
+        utteranceRef.current = utterance;
         speechSynthesis.speak(utterance);
+    }, [text, voices, selectedVoice]);
+
+    // 🛑 Stop speech manually if needed
+    const stopSpeaking = () => {
+        speechSynthesis.cancel();
+        setSpeaking(false);
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-8">
-            <div className="max-w-2xl mx-auto">
-                <div className="bg-white rounded-2xl shadow-lg p-8">
-                    <div className="flex items-center gap-3 mb-6">
-                        <Volume2 className="w-8 h-8 text-purple-600" />
-                        <h1 className="text-3xl font-bold text-gray-800">Text to Speech</h1>
-                    </div>
-
-                    <div className="mt-6 space-y-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Voice
-                            </label>
-                            <select
-                                value={selectedVoice}
-                                onChange={(e) => setSelectedVoice(e.target.value)}
-                                className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none"
-                            >
-                                {voices.map((voice) => (
-                                    <option key={voice.name} value={voice.name}>
-                                        {voice.name} ({voice.lang})
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                    </div>
-
+        <div className="w-full max-w-2xl mx-auto bg-white/90 dark:bg-gray-900 backdrop-blur-md rounded-2xl shadow-lg p-6 transition">
+            <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                    <Volume2 className="w-6 h-6 text-purple-600" />
+                    <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                        Voice Assistant
+                    </h2>
                 </div>
+                {speaking && (
+                    <button
+                        onClick={stopSpeaking}
+                        className="flex items-center gap-1 px-3 py-1 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition"
+                    >
+                        <Square className="w-4 h-4" /> Stop
+                    </button>
+                )}
+            </div>
+
+            <div className="flex flex-col gap-3">
+                <label className="text-sm text-gray-600 dark:text-gray-400">
+                    Select Voice
+                </label>
+                <select
+                    value={selectedVoice}
+                    onChange={(e) => setSelectedVoice(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-800 dark:text-gray-100"
+                >
+                    {voices.map((voice) => (
+                        <option
+                            key={voice.name}
+                            value={voice.name}
+                            className="text-gray-800 dark:text-gray-200"
+                        >
+                            {voice.name} ({voice.lang})
+                        </option>
+                    ))}
+                </select>
             </div>
         </div>
     );

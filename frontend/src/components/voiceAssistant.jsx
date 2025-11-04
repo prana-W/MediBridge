@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Mic, MicOff, Send, RotateCcw, MessageSquare, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import TextToSpeech from "@/components/textToSpeech.jsx"
 
 // Heartbeat ECG Animation Component
 function HeartbeatAnimation() {
@@ -121,15 +122,9 @@ const Dictaphone = () => {
                 console.log("✅ AI Response:", data);
                 setAiResponse(data?.response || "No response");
                 toast.success(message || "AI response received", {
-                    duration: 10000, // ⏱️ 6 seconds
-                    style: {
-                        background: "#1e293b", // slate-800
-                        color: "#fff",
-                        border: "1px solid #6366f1", // indigo border
-                        fontWeight: 500,
-                    },
-                    icon: "🤖",
+                    duration: 10000
                 });
+                <TextToSpeech text={message}/>
             } else {
                 toast.error(message || "Something went wrong while interpreting.");
             }
