@@ -5,9 +5,39 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Stethoscope, Mail, Lock, User, Building2, CreditCard, Calendar, Search, Heart } from 'lucide-react';
+import { Stethoscope, Mail, Lock, User, Building2, CreditCard, Calendar, Search, Heart, Activity } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
+
+// Heartbeat Animation Component
+function HeartbeatLine() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 150 40"
+      preserveAspectRatio="none"
+      className="absolute w-full h-20 stroke-[#4AD2CC] opacity-20"
+      style={{ top: '50%', transform: 'translateY(-50%)' }}
+    >
+      <polyline
+        fill="none"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeDasharray="220"
+        strokeDashoffset="220"
+        points="0,20 20,20 25,15 30,25 40,20 60,20 65,5 70,35 75,20 95,20 100,15 110,20 150,20"
+      >
+        <animate
+          attributeName="stroke-dashoffset"
+          values="220;0"
+          dur="2s"
+          repeatCount="indefinite"
+        />
+      </polyline>
+    </svg>
+  );
+}
 
 export default function DoctorAuth() {
     const [isLogin, setIsLogin] = useState(true);
@@ -142,289 +172,299 @@ export default function DoctorAuth() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#F2F2F2' }}>
-            <Card className="w-full max-w-2xl shadow-2xl border-none bg-white transition-all duration-300 hover:shadow-3xl">
-                <CardHeader className="space-y-3 pb-6">
-                    <div className="flex items-center justify-center mb-2">
-                        <div className="p-4 rounded-full transition-transform duration-300 hover:scale-110" style={{ backgroundColor: '#4AD2CC' }}>
-                            <Stethoscope className="w-10 h-10 text-white" />
-                        </div>
-                    </div>
-                    <CardTitle className="text-3xl text-center font-bold" style={{ color: '#333333' }}>
-                        {isLogin ? 'Doctor Login' : 'Doctor Registration'}
-                    </CardTitle>
-                    <CardDescription className="text-center text-base" style={{ color: '#333333', opacity: 0.7 }}>
-                        {isLogin
-                            ? 'Access your medical practice dashboard'
-                            : 'Create your account to manage patients'}
-                    </CardDescription>
-                </CardHeader>
+        <div className="min-h-screen flex items-center justify-center p-4 bg-[#F2F2F2] relative overflow-hidden">
+            {/* Grid Background Pattern */}
+            <div className="absolute inset-0 opacity-10">
+                <div
+                    className="h-full w-full"
+                    style={{
+                        backgroundImage: `linear-gradient(#4A90E2 1px, transparent 1px), linear-gradient(90deg, #4A90E2 1px, transparent 1px)`,
+                        backgroundSize: "50px 50px",
+                    }}
+                ></div>
+            </div>
 
-                <CardContent>
-                    {message.text && (
-                        <Alert className={`mb-6 border-none transition-all duration-300 ${message.type === 'success' ? 'bg-green-50' : 'bg-red-50'}`}>
-                            <AlertDescription className={`font-medium ${message.type === 'success' ? 'text-green-700' : 'text-red-700'}`}>
-                                {message.text}
-                            </AlertDescription>
-                        </Alert>
-                    )}
+            <div className="relative z-10 w-full max-w-2xl">
+                {/* Heartbeat background */}
+                <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
+                    <HeartbeatLine />
+                </div>
 
-                    {isLogin ? (
-                        <div className="space-y-5" onSubmit={handleLoginSubmit}>
-                            <div className="space-y-2">
-                                <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
-                                    Email or Phone Number
-                                </Label>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4AD2CC' }} />
-                                    <Input
-                                        placeholder="doctor@hospital.com"
-                                        className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                        style={{ borderColor: '#E5E5E5' }}
-                                        value={loginForm.email}
-                                        onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
-                                        required
-                                    />
-                                </div>
+                <Card className="relative shadow-2xl rounded-3xl bg-white/95 backdrop-blur-sm border-2 border-[#4AD2CC]/20 hover:border-[#4AD2CC]/40 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(74,210,204,0.3)] group">
+                    <CardHeader className="space-y-3 pb-6">
+                        <div className="flex items-center justify-center mb-2">
+                            <div className="p-4 rounded-xl bg-gradient-to-br from-[#4AD2CC] to-[#3BB5AF] group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                                <Stethoscope className="w-10 h-10 text-white" />
                             </div>
-
-                            <div className="space-y-2">
-                                <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
-                                    Password
-                                </Label>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4AD2CC' }} />
-                                    <Input
-                                        type="password"
-                                        placeholder="••••••••"
-                                        className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                        style={{ borderColor: '#E5E5E5' }}
-                                        value={loginForm.password}
-                                        onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <Button 
-                                onClick={handleLoginSubmit}
-                                className="w-full text-white font-semibold py-6 text-base rounded-lg transition-all duration-200 hover:opacity-90 shadow-lg"
-                                style={{ backgroundColor: '#4AD2CC' }}
-                                disabled={loading}
-                            >
-                                {loading ? 'Logging in...' : 'Login'}
-                            </Button>
                         </div>
-                    ) : (
-                        <div className="space-y-5">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <CardTitle className="text-3xl text-center font-bold text-[#333333]">
+                            {isLogin ? 'Doctor Login' : 'Doctor Registration'}
+                        </CardTitle>
+                        <CardDescription className="text-center text-base text-gray-600">
+                            {isLogin
+                                ? 'Access your medical practice dashboard'
+                                : 'Create your account to manage patients'}
+                        </CardDescription>
+                    </CardHeader>
+
+                    <CardContent>
+                        {message.text && (
+                            <Alert className={`mb-6 border-2 transition-all duration-300 ${
+                                message.type === 'success' 
+                                    ? 'bg-green-50 border-green-200' 
+                                    : 'bg-red-50 border-red-200'
+                            }`}>
+                                <AlertDescription className={`font-medium ${
+                                    message.type === 'success' ? 'text-green-700' : 'text-red-700'
+                                }`}>
+                                    {message.text}
+                                </AlertDescription>
+                            </Alert>
+                        )}
+
+                        {isLogin ? (
+                            <div className="space-y-5">
                                 <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
-                                        Full Name
+                                    <Label className="text-base font-semibold text-[#333333]">
+                                        Email or Phone Number
                                     </Label>
                                     <div className="relative">
-                                        <User className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4A90E2' }} />
+                                        <Mail className="absolute left-3 top-3.5 h-5 w-5 text-[#4AD2CC]" />
                                         <Input
-                                            placeholder="Dr. John Doe"
-                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                            style={{ borderColor: '#E5E5E5' }}
-                                            value={signupForm.name}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, name: e.target.value }))}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
-                                        Department
-                                    </Label>
-                                    <Select
-                                        value={signupForm.department}
-                                        onValueChange={(value) => setSignupForm(prev => ({ ...prev, department: value }))}
-                                    >
-                                        <SelectTrigger className="py-6 border-gray-200" style={{ borderColor: '#E5E5E5' }}>
-                                            <SelectValue placeholder="Select department" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {departments.map(dept => (
-                                                <SelectItem key={dept} value={dept}>
-                                                    {dept.charAt(0).toUpperCase() + dept.slice(1)}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-
-                                <div className="space-y-2 md:col-span-2">
-                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
-                                        Hospital
-                                    </Label>
-                                    <Select
-                                        value={signupForm.hospital}
-                                        onValueChange={(value) => setSignupForm(prev => ({ ...prev, hospital: value }))}
-                                    >
-                                        <SelectTrigger className="py-6 border-gray-200" style={{ borderColor: '#E5E5E5' }}>
-                                            <SelectValue placeholder="Select hospital" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <div className="p-2">
-                                                <div className="relative mb-2">
-                                                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                                    <Input
-                                                        type="text"
-                                                        placeholder="Search hospital..."
-                                                        className="pl-9 text-sm"
-                                                        value={searchTerm}
-                                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                                    />
-                                                </div>
-                                                {filteredHospitals.length > 0 ? (
-                                                    filteredHospitals.map((hospital, idx) => (
-                                                        <SelectItem key={idx} value={hospital.name}>
-                                                            {hospital.name} ({hospital.state})
-                                                        </SelectItem>
-                                                    ))
-                                                ) : (
-                                                    <p className="text-gray-500 text-sm px-2">No hospitals found</p>
-                                                )}
-                                            </div>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
-                                        ID Card Number
-                                    </Label>
-                                    <div className="relative">
-                                        <CreditCard className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4A90E2' }} />
-                                        <Input
-                                            placeholder="MED123456"
-                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                            style={{ borderColor: '#E5E5E5' }}
-                                            value={signupForm.idCardNumber}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, idCardNumber: e.target.value }))}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
-                                        Email
-                                    </Label>
-                                    <div className="relative">
-                                        <Mail className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4A90E2' }} />
-                                        <Input
-                                            type="email"
                                             placeholder="doctor@hospital.com"
-                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                            style={{ borderColor: '#E5E5E5' }}
-                                            value={signupForm.email}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, email: e.target.value }))}
+                                            className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4AD2CC]/30 hover:border-[#4AD2CC] transition-all duration-300 text-base bg-white hover:shadow-lg"
+                                            value={loginForm.email}
+                                            onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
                                             required
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
+                                    <Label className="text-base font-semibold text-[#333333]">
                                         Password
                                     </Label>
                                     <div className="relative">
-                                        <Lock className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4A90E2' }} />
+                                        <Lock className="absolute left-3 top-3.5 h-5 w-5 text-[#4AD2CC]" />
                                         <Input
                                             type="password"
                                             placeholder="••••••••"
-                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                            style={{ borderColor: '#E5E5E5' }}
-                                            value={signupForm.password}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, password: e.target.value }))}
+                                            className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4AD2CC]/30 hover:border-[#4AD2CC] transition-all duration-300 text-base bg-white hover:shadow-lg"
+                                            value={loginForm.password}
+                                            onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
                                             required
                                         />
                                     </div>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
-                                        Confirm Password
-                                    </Label>
-                                    <div className="relative">
-                                        <Lock className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4A90E2' }} />
-                                        <Input
-                                            type="password"
-                                            placeholder="••••••••"
-                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
-                                            style={{ borderColor: '#E5E5E5' }}
-                                            value={signupForm.confirmPassword}
-                                            onChange={(e) => setSignupForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                                            required
-                                        />
-                                    </div>
-                                </div>
+                                <Button 
+                                    onClick={handleLoginSubmit}
+                                    className="w-full h-14 bg-gradient-to-r from-[#4AD2CC] to-[#3BB5AF] hover:from-[#3BB5AF] hover:to-[#4AD2CC] text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Logging in...' : 'Login'}
+                                </Button>
                             </div>
+                        ) : (
+                            <div className="space-y-5">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label className="text-base font-semibold text-[#333333]">
+                                            Full Name
+                                        </Label>
+                                        <div className="relative">
+                                            <User className="absolute left-3 top-3.5 h-5 w-5 text-[#4A90E2]" />
+                                            <Input
+                                                placeholder="Dr. John Doe"
+                                                className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg"
+                                                value={signupForm.name}
+                                                onChange={(e) => setSignupForm(prev => ({ ...prev, name: e.target.value }))}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
 
-                            <div className="space-y-3">
-                                <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: '#333333' }}>
-                                    <Calendar className="h-4 w-4" style={{ color: '#4A90E2' }} />
-                                    Working Days
-                                </Label>
-                                <div className="grid grid-cols-4 gap-2">
-                                    {weekDays.map(day => (
-                                        <Button
-                                            key={day}
-                                            type="button"
-                                            className={`text-xs font-semibold py-5 transition-all duration-200 ${
-                                                signupForm.workingDays.includes(day) 
-                                                    ? 'text-white shadow-md' 
-                                                    : 'bg-white hover:bg-gray-50'
-                                            }`}
-                                            style={signupForm.workingDays.includes(day) 
-                                                ? { backgroundColor: '#4A90E2' } 
-                                                : { color: '#333333', borderColor: '#E5E5E5' }
-                                            }
-                                            onClick={() => toggleWorkingDay(day)}
+                                    <div className="space-y-2">
+                                        <Label className="text-base font-semibold text-[#333333]">
+                                            Department
+                                        </Label>
+                                        <Select
+                                            value={signupForm.department}
+                                            onValueChange={(value) => setSignupForm(prev => ({ ...prev, department: value }))}
                                         >
-                                            {day.slice(0, 3).toUpperCase()}
-                                        </Button>
-                                    ))}
+                                            <SelectTrigger className="h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg">
+                                                <SelectValue placeholder="Select department" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {departments.map(dept => (
+                                                    <SelectItem key={dept} value={dept}>
+                                                        {dept.charAt(0).toUpperCase() + dept.slice(1)}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label className="text-base font-semibold text-[#333333]">
+                                            Hospital
+                                        </Label>
+                                        <Select
+                                            value={signupForm.hospital}
+                                            onValueChange={(value) => setSignupForm(prev => ({ ...prev, hospital: value }))}
+                                        >
+                                            <SelectTrigger className="h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg">
+                                                <SelectValue placeholder="Select hospital" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <div className="p-2">
+                                                    <div className="relative mb-2">
+                                                        <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Search hospital..."
+                                                            className="pl-9 text-sm"
+                                                            value={searchTerm}
+                                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                                        />
+                                                    </div>
+                                                    {filteredHospitals.length > 0 ? (
+                                                        filteredHospitals.map((hospital, idx) => (
+                                                            <SelectItem key={idx} value={hospital.name}>
+                                                                {hospital.name} ({hospital.state})
+                                                            </SelectItem>
+                                                        ))
+                                                    ) : (
+                                                        <p className="text-gray-500 text-sm px-2">No hospitals found</p>
+                                                    )}
+                                                </div>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-base font-semibold text-[#333333]">
+                                            ID Card Number
+                                        </Label>
+                                        <div className="relative">
+                                            <CreditCard className="absolute left-3 top-3.5 h-5 w-5 text-[#4A90E2]" />
+                                            <Input
+                                                placeholder="MED123456"
+                                                className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg"
+                                                value={signupForm.idCardNumber}
+                                                onChange={(e) => setSignupForm(prev => ({ ...prev, idCardNumber: e.target.value }))}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-base font-semibold text-[#333333]">
+                                            Email
+                                        </Label>
+                                        <div className="relative">
+                                            <Mail className="absolute left-3 top-3.5 h-5 w-5 text-[#4A90E2]" />
+                                            <Input
+                                                type="email"
+                                                placeholder="doctor@hospital.com"
+                                                className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg"
+                                                value={signupForm.email}
+                                                onChange={(e) => setSignupForm(prev => ({ ...prev, email: e.target.value }))}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-base font-semibold text-[#333333]">
+                                            Password
+                                        </Label>
+                                        <div className="relative">
+                                            <Lock className="absolute left-3 top-3.5 h-5 w-5 text-[#4A90E2]" />
+                                            <Input
+                                                type="password"
+                                                placeholder="••••••••"
+                                                className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg"
+                                                value={signupForm.password}
+                                                onChange={(e) => setSignupForm(prev => ({ ...prev, password: e.target.value }))}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label className="text-base font-semibold text-[#333333]">
+                                            Confirm Password
+                                        </Label>
+                                        <div className="relative">
+                                            <Lock className="absolute left-3 top-3.5 h-5 w-5 text-[#4A90E2]" />
+                                            <Input
+                                                type="password"
+                                                placeholder="••••••••"
+                                                className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg"
+                                                value={signupForm.confirmPassword}
+                                                onChange={(e) => setSignupForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <div className="space-y-3">
+                                    <Label className="text-base font-semibold flex items-center gap-2 text-[#333333]">
+                                        <Calendar className="h-5 w-5 text-[#4A90E2]" />
+                                        Working Days
+                                    </Label>
+                                    <div className="grid grid-cols-4 gap-2">
+                                        {weekDays.map(day => (
+                                            <Button
+                                                key={day}
+                                                type="button"
+                                                className={`text-sm font-semibold h-12 rounded-xl transition-all duration-300 hover:scale-105 ${
+                                                    signupForm.workingDays.includes(day) 
+                                                        ? 'bg-gradient-to-br from-[#4A90E2] to-[#357ABD] text-white shadow-lg hover:shadow-xl' 
+                                                        : 'bg-white hover:bg-gray-50 text-[#333333] border-2 border-gray-300 hover:border-[#4A90E2]'
+                                                }`}
+                                                onClick={() => toggleWorkingDay(day)}
+                                            >
+                                                {day.slice(0, 3).toUpperCase()}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <Button 
+                                    onClick={handleSignupSubmit}
+                                    className="w-full h-14 bg-gradient-to-r from-[#4AD2CC] to-[#3BB5AF] hover:from-[#3BB5AF] hover:to-[#4AD2CC] text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Creating Account...' : 'Create Account'}
+                                </Button>
                             </div>
+                        )}
+                    </CardContent>
 
-                            <Button 
-                                onClick={handleSignupSubmit}
-                                className="w-full text-white font-semibold py-6 text-base rounded-lg transition-all duration-200 hover:opacity-90 shadow-lg"
-                                style={{ backgroundColor: '#4AD2CC' }}
-                                disabled={loading}
+                    <CardFooter className="flex flex-col space-y-3 pt-6">
+                        <div className="text-sm text-center text-gray-600">
+                            {isLogin ? "Don't have an account? " : 'Already have an account? '}
+                            <button
+                                type="button"
+                                className="font-semibold hover:underline transition-all duration-200 text-[#4AD2CC]"
+                                onClick={() => {
+                                    setIsLogin(!isLogin);
+                                    setMessage({ type: '', text: '' });
+                                }}
                             >
-                                {loading ? 'Creating Account...' : 'Create Account'}
-                            </Button>
+                                {isLogin ? 'Sign up' : 'Login'}
+                            </button>
                         </div>
-                    )}
-                </CardContent>
-
-                <CardFooter className="flex flex-col space-y-3 pt-6">
-                    <div className="text-sm text-center" style={{ color: '#333333', opacity: 0.7 }}>
-                        {isLogin ? "Don't have an account? " : 'Already have an account? '}
-                        <button
-                            type="button"
-                            className="font-semibold hover:underline transition-all duration-200"
-                            style={{ color: '#4AD2CC' }}
-                            onClick={() => {
-                                setIsLogin(!isLogin);
-                                setMessage({ type: '', text: '' });
-                            }}
-                        >
-                            {isLogin ? 'Sign up' : 'Login'}
-                        </button>
-                    </div>
-                    <div className="flex items-center justify-center gap-2 text-xs" style={{ color: '#333333', opacity: 0.5 }}>
-                        <Heart className="h-3 w-3" style={{ color: '#FF6B6B' }} />
-                        <span>Powered by MediBridge</span>
-                    </div>
-                </CardFooter>
-            </Card>
+                        <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
+                            <Heart className="h-3 w-3 text-[#FF6B6B]" />
+                            <span>Powered by MediBridge</span>
+                        </div>
+                    </CardFooter>
+                </Card>
+            </div>
         </div>
     );
 }
