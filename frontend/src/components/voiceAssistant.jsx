@@ -264,7 +264,7 @@ const Dictaphone = () => {
                             </div>
                         </div>
                     )}
-                    {msg && <TextToSpeech text={msg}/>}
+                    {msg && <TextToSpeech text={msg} language={language}}/>}
                     {/* Action Buttons */}
                     <div className="flex gap-4 pt-2">
                         <Button 
