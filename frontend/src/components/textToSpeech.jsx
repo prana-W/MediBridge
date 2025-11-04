@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 
-export default function TextToSpeech({ text, language = "en-US" }) {
+export default function TextToSpeech({ text }) {
     const [voices, setVoices] = useState([]);
     const utteranceRef = useRef(null);
 
     const pitch = 1;
-    const rate = 1.5;
+    const rate = 1;
 
     useEffect(() => {
         const loadVoices = () => {
@@ -30,12 +30,9 @@ export default function TextToSpeech({ text, language = "en-US" }) {
             utterance.rate = rate;
             utterance.pitch = pitch;
 
-            // Find voice matching the language
+            // Use first available voice
             if (voices.length > 0) {
-                const matchingVoice = voices.find(voice =>
-                    voice.lang.startsWith(language.split('-')[0])
-                );
-                utterance.voice = matchingVoice || voices[0];
+                utterance.voice = voices[0];
             }
 
             utteranceRef.current = utterance;
@@ -54,7 +51,7 @@ export default function TextToSpeech({ text, language = "en-US" }) {
         } else {
             speakNow();
         }
-    }, [text, voices, language]);
+    }, [text, voices]);
 
     // Cleanup on unmount
     useEffect(() => {
