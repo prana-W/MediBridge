@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { User, Phone, CreditCard, Lock, MapPin, Stethoscope } from "lucide-react";
+import { User, Phone, Lock, MapPin, Stethoscope } from "lucide-react";
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -78,7 +78,6 @@ export default function PatientAuth() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(signupData),
-                credentials: "include"
             });
 
             const data = await res.json();

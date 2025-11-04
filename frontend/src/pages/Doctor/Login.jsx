@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Stethoscope, Mail, Lock, User, Building2, CreditCard, Calendar, Search } from 'lucide-react';
+import { Stethoscope, Mail, Lock, User, Building2, CreditCard, Calendar, Search, Heart } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -46,7 +46,6 @@ export default function DoctorAuth() {
 
     const weekDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-    // ✅ Fetch Hospitals on Mount
     useEffect(() => {
         const fetchHospitals = async () => {
             try {
@@ -65,7 +64,6 @@ export default function DoctorAuth() {
         fetchHospitals();
     }, []);
 
-    // ✅ Search Filter Logic
     useEffect(() => {
         const filtered = hospitals.filter(h =>
             h.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -144,18 +142,18 @@ export default function DoctorAuth() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center p-4">
-            <Card className="w-full max-w-2xl shadow-xl">
-                <CardHeader className="space-y-1">
-                    <div className="flex items-center justify-center mb-4">
-                        <div className="bg-blue-600 p-3 rounded-full">
-                            <Stethoscope className="w-8 h-8 text-white" />
+        <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#F2F2F2' }}>
+            <Card className="w-full max-w-2xl shadow-2xl border-none bg-white transition-all duration-300 hover:shadow-3xl">
+                <CardHeader className="space-y-3 pb-6">
+                    <div className="flex items-center justify-center mb-2">
+                        <div className="p-4 rounded-full transition-transform duration-300 hover:scale-110" style={{ backgroundColor: '#4AD2CC' }}>
+                            <Stethoscope className="w-10 h-10 text-white" />
                         </div>
                     </div>
-                    <CardTitle className="text-2xl text-center">
+                    <CardTitle className="text-3xl text-center font-bold" style={{ color: '#333333' }}>
                         {isLogin ? 'Doctor Login' : 'Doctor Registration'}
                     </CardTitle>
-                    <CardDescription className="text-center">
+                    <CardDescription className="text-center text-base" style={{ color: '#333333', opacity: 0.7 }}>
                         {isLogin
                             ? 'Access your medical practice dashboard'
                             : 'Create your account to manage patients'}
@@ -164,62 +162,88 @@ export default function DoctorAuth() {
 
                 <CardContent>
                     {message.text && (
-                        <Alert className={`mb-4 ${message.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                            <AlertDescription className={message.type === 'success' ? 'text-green-800' : 'text-red-800'}>
+                        <Alert className={`mb-6 border-none transition-all duration-300 ${message.type === 'success' ? 'bg-green-50' : 'bg-red-50'}`}>
+                            <AlertDescription className={`font-medium ${message.type === 'success' ? 'text-green-700' : 'text-red-700'}`}>
                                 {message.text}
                             </AlertDescription>
                         </Alert>
                     )}
 
                     {isLogin ? (
-                        <form onSubmit={handleLoginSubmit} className="space-y-4">
-                            {/* --- LOGIN --- */}
+                        <div className="space-y-5" onSubmit={handleLoginSubmit}>
                             <div className="space-y-2">
-                                <Label>Email or Phone Number</Label>
-                                <Input
-                                    placeholder="doctor@hospital.com"
-                                    value={loginForm.email}
-                                    onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
-                                    required
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label>Password</Label>
-                                <Input
-                                    type="password"
-                                    placeholder="••••••••"
-                                    value={loginForm.password}
-                                    onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
-                                    required
-                                />
-                            </div>
-
-                            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
-                                {loading ? 'Logging in...' : 'Login'}
-                            </Button>
-                        </form>
-                    ) : (
-                        <form onSubmit={handleSignupSubmit} className="space-y-4">
-                            {/* --- SIGNUP --- */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label>Full Name</Label>
+                                <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
+                                    Email or Phone Number
+                                </Label>
+                                <div className="relative">
+                                    <Mail className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4AD2CC' }} />
                                     <Input
-                                        placeholder="Dr. John Doe"
-                                        value={signupForm.name}
-                                        onChange={(e) => setSignupForm(prev => ({ ...prev, name: e.target.value }))}
+                                        placeholder="doctor@hospital.com"
+                                        className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
+                                        style={{ borderColor: '#E5E5E5' }}
+                                        value={loginForm.email}
+                                        onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
                                         required
                                     />
                                 </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
+                                    Password
+                                </Label>
+                                <div className="relative">
+                                    <Lock className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4AD2CC' }} />
+                                    <Input
+                                        type="password"
+                                        placeholder="••••••••"
+                                        className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
+                                        style={{ borderColor: '#E5E5E5' }}
+                                        value={loginForm.password}
+                                        onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <Button 
+                                onClick={handleLoginSubmit}
+                                className="w-full text-white font-semibold py-6 text-base rounded-lg transition-all duration-200 hover:opacity-90 shadow-lg"
+                                style={{ backgroundColor: '#4AD2CC' }}
+                                disabled={loading}
+                            >
+                                {loading ? 'Logging in...' : 'Login'}
+                            </Button>
+                        </div>
+                    ) : (
+                        <div className="space-y-5">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
+                                        Full Name
+                                    </Label>
+                                    <div className="relative">
+                                        <User className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4A90E2' }} />
+                                        <Input
+                                            placeholder="Dr. John Doe"
+                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
+                                            style={{ borderColor: '#E5E5E5' }}
+                                            value={signupForm.name}
+                                            onChange={(e) => setSignupForm(prev => ({ ...prev, name: e.target.value }))}
+                                            required
+                                        />
+                                    </div>
+                                </div>
 
                                 <div className="space-y-2">
-                                    <Label>Department</Label>
+                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
+                                        Department
+                                    </Label>
                                     <Select
                                         value={signupForm.department}
                                         onValueChange={(value) => setSignupForm(prev => ({ ...prev, department: value }))}
                                     >
-                                        <SelectTrigger>
+                                        <SelectTrigger className="py-6 border-gray-200" style={{ borderColor: '#E5E5E5' }}>
                                             <SelectValue placeholder="Select department" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -232,14 +256,15 @@ export default function DoctorAuth() {
                                     </Select>
                                 </div>
 
-                                {/* ✅ HOSPITAL DROPDOWN WITH SEARCH */}
                                 <div className="space-y-2 md:col-span-2">
-                                    <Label>Hospital</Label>
+                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
+                                        Hospital
+                                    </Label>
                                     <Select
                                         value={signupForm.hospital}
                                         onValueChange={(value) => setSignupForm(prev => ({ ...prev, hospital: value }))}
                                     >
-                                        <SelectTrigger>
+                                        <SelectTrigger className="py-6 border-gray-200" style={{ borderColor: '#E5E5E5' }}>
                                             <SelectValue placeholder="Select hospital" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -269,59 +294,96 @@ export default function DoctorAuth() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>ID Card Number</Label>
-                                    <Input
-                                        placeholder="MED123456"
-                                        value={signupForm.idCardNumber}
-                                        onChange={(e) => setSignupForm(prev => ({ ...prev, idCardNumber: e.target.value }))}
-                                        required
-                                    />
+                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
+                                        ID Card Number
+                                    </Label>
+                                    <div className="relative">
+                                        <CreditCard className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4A90E2' }} />
+                                        <Input
+                                            placeholder="MED123456"
+                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
+                                            style={{ borderColor: '#E5E5E5' }}
+                                            value={signupForm.idCardNumber}
+                                            onChange={(e) => setSignupForm(prev => ({ ...prev, idCardNumber: e.target.value }))}
+                                            required
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Email</Label>
-                                    <Input
-                                        type="email"
-                                        placeholder="doctor@hospital.com"
-                                        value={signupForm.email}
-                                        onChange={(e) => setSignupForm(prev => ({ ...prev, email: e.target.value }))}
-                                        required
-                                    />
+                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
+                                        Email
+                                    </Label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4A90E2' }} />
+                                        <Input
+                                            type="email"
+                                            placeholder="doctor@hospital.com"
+                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
+                                            style={{ borderColor: '#E5E5E5' }}
+                                            value={signupForm.email}
+                                            onChange={(e) => setSignupForm(prev => ({ ...prev, email: e.target.value }))}
+                                            required
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Password</Label>
-                                    <Input
-                                        type="password"
-                                        placeholder="••••••••"
-                                        value={signupForm.password}
-                                        onChange={(e) => setSignupForm(prev => ({ ...prev, password: e.target.value }))}
-                                        required
-                                    />
+                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
+                                        Password
+                                    </Label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4A90E2' }} />
+                                        <Input
+                                            type="password"
+                                            placeholder="••••••••"
+                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
+                                            style={{ borderColor: '#E5E5E5' }}
+                                            value={signupForm.password}
+                                            onChange={(e) => setSignupForm(prev => ({ ...prev, password: e.target.value }))}
+                                            required
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Confirm Password</Label>
-                                    <Input
-                                        type="password"
-                                        placeholder="••••••••"
-                                        value={signupForm.confirmPassword}
-                                        onChange={(e) => setSignupForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                                        required
-                                    />
+                                    <Label className="text-sm font-semibold" style={{ color: '#333333' }}>
+                                        Confirm Password
+                                    </Label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-3 h-5 w-5" style={{ color: '#4A90E2' }} />
+                                        <Input
+                                            type="password"
+                                            placeholder="••••••••"
+                                            className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
+                                            style={{ borderColor: '#E5E5E5' }}
+                                            value={signupForm.confirmPassword}
+                                            onChange={(e) => setSignupForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                                            required
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* WORKING DAYS */}
-                            <div className="space-y-2">
-                                <Label>Working Days</Label>
+                            <div className="space-y-3">
+                                <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: '#333333' }}>
+                                    <Calendar className="h-4 w-4" style={{ color: '#4A90E2' }} />
+                                    Working Days
+                                </Label>
                                 <div className="grid grid-cols-4 gap-2">
                                     {weekDays.map(day => (
                                         <Button
                                             key={day}
                                             type="button"
-                                            variant={signupForm.workingDays.includes(day) ? 'default' : 'outline'}
-                                            className={`text-xs ${signupForm.workingDays.includes(day) ? 'bg-blue-600 hover:bg-blue-700' : ''}`}
+                                            className={`text-xs font-semibold py-5 transition-all duration-200 ${
+                                                signupForm.workingDays.includes(day) 
+                                                    ? 'text-white shadow-md' 
+                                                    : 'bg-white hover:bg-gray-50'
+                                            }`}
+                                            style={signupForm.workingDays.includes(day) 
+                                                ? { backgroundColor: '#4A90E2' } 
+                                                : { color: '#333333', borderColor: '#E5E5E5' }
+                                            }
                                             onClick={() => toggleWorkingDay(day)}
                                         >
                                             {day.slice(0, 3).toUpperCase()}
@@ -330,19 +392,25 @@ export default function DoctorAuth() {
                                 </div>
                             </div>
 
-                            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
+                            <Button 
+                                onClick={handleSignupSubmit}
+                                className="w-full text-white font-semibold py-6 text-base rounded-lg transition-all duration-200 hover:opacity-90 shadow-lg"
+                                style={{ backgroundColor: '#4AD2CC' }}
+                                disabled={loading}
+                            >
                                 {loading ? 'Creating Account...' : 'Create Account'}
                             </Button>
-                        </form>
+                        </div>
                     )}
                 </CardContent>
 
-                <CardFooter className="flex flex-col space-y-2">
-                    <div className="text-sm text-center text-gray-600">
+                <CardFooter className="flex flex-col space-y-3 pt-6">
+                    <div className="text-sm text-center" style={{ color: '#333333', opacity: 0.7 }}>
                         {isLogin ? "Don't have an account? " : 'Already have an account? '}
                         <button
                             type="button"
-                            className="text-blue-600 hover:underline font-medium"
+                            className="font-semibold hover:underline transition-all duration-200"
+                            style={{ color: '#4AD2CC' }}
                             onClick={() => {
                                 setIsLogin(!isLogin);
                                 setMessage({ type: '', text: '' });
@@ -350,6 +418,10 @@ export default function DoctorAuth() {
                         >
                             {isLogin ? 'Sign up' : 'Login'}
                         </button>
+                    </div>
+                    <div className="flex items-center justify-center gap-2 text-xs" style={{ color: '#333333', opacity: 0.5 }}>
+                        <Heart className="h-3 w-3" style={{ color: '#FF6B6B' }} />
+                        <span>Powered by MediBridge</span>
                     </div>
                 </CardFooter>
             </Card>

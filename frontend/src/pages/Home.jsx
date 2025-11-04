@@ -1,7 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Heart, Stethoscope, Users, Activity } from 'lucide-react';
+import { Heart } from 'lucide-react';
 
 export default function MediBridgeHome() {
   return (
@@ -39,138 +38,90 @@ export default function MediBridgeHome() {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section - Split Design */}
       <main className="flex-grow">
-        <section className="py-20 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-5xl mx-auto text-center">
-            <div className="mb-6 flex justify-center">
-              <Activity className="h-16 w-16" style={{ color: '#4AD2CC' }} />
+        <section className="relative min-h-[600px] overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div className="grid md:grid-cols-2 gap-0 items-center min-h-[600px]">
+              
+              {/* Left Side - Speech Bubble with Content */}
+              <div className="relative py-12 md:py-0 flex items-center">
+                {/* Speech Bubble Shape */}
+                <div className="relative w-full">
+                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 500 400" preserveAspectRatio="none">
+                    <path
+                      d="M 50 50 Q 50 30, 70 30 L 430 30 Q 450 30, 450 50 L 450 300 Q 450 320, 430 320 L 250 320 L 200 370 L 200 320 L 70 320 Q 50 320, 50 300 Z"
+                      fill="#4AD2CC"
+                    />
+                  </svg>
+                  
+                  {/* Content inside speech bubble */}
+                  <div className="relative z-10 px-12 py-16">
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+                      Connecting Patients and Doctors Seamlessly
+                    </h1>
+                    
+                    <p className="text-white text-base md:text-lg mb-8 opacity-90">
+                      MediBridge is your trusted healthcare platform that brings quality medical care to your fingertips.
+                    </p>
+                    
+                    {/* Two Buttons Stacked */}
+                    <div className="space-y-4 max-w-xs">
+                      <Button 
+                        className="w-full text-white font-semibold py-6 text-base rounded-full hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
+                        style={{ backgroundColor: '#4A90E2' }}
+                        onClick={() => window.location.href = '/patient/auth'}
+                      >
+                        Patient Sign In / Login
+                      </Button>
+                      
+                      <Button 
+                        className="w-full text-white font-semibold py-6 text-base rounded-full hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
+                        style={{ backgroundColor: '#4A90E2' }}
+                        onClick={() => window.location.href = '/doctor/auth'}
+                      >
+                        Doctor Sign In / Login
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Side - Doctor Image with Decorative Elements */}
+              <div className="relative flex items-center justify-center py-12 md:py-0">
+                <div className="relative z-10">
+                  {/* Decorative white boxes behind doctor */}
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 space-y-6 w-64">
+                    <div className="bg-white rounded-2xl p-4 shadow-lg">
+                      <div className="h-3 bg-gray-200 rounded-full"></div>
+                    </div>
+                    <div className="bg-white rounded-2xl p-4 shadow-lg">
+                      <div className="h-3 bg-gray-200 rounded-full"></div>
+                    </div>
+                    <div className="bg-white rounded-2xl p-4 shadow-lg">
+                      <div className="h-3 bg-gray-200 rounded-full"></div>
+                    </div>
+                  </div>
+                  
+                  {/* Doctor Illustration/Icon */}
+                  <div className="relative z-20 flex items-center justify-center">
+                    <div className="w-72 h-72 rounded-full flex items-center justify-center" style={{ backgroundColor: '#4AD2CC20' }}>
+                      <div className="text-center">
+                        {/* Placeholder for doctor image - you can replace with actual image */}
+                        <div className="w-48 h-48 mx-auto rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#4AD2CC' }}>
+                          <svg className="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                          </svg>
+                        </div>
+                        <div className="text-4xl mb-2">👨‍⚕️</div>
+                        <div className="w-16 h-1 mx-auto rounded-full" style={{ backgroundColor: '#4A90E2' }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6" style={{ color: '#333333' }}>
-              Connecting Patients and Doctors Seamlessly
-            </h1>
-            <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto" style={{ color: '#333333', opacity: 0.8 }}>
-              MediBridge is your trusted healthcare platform that brings quality medical care to your fingertips. 
-              Experience hassle-free appointments, secure consultations, and comprehensive health management all in one place.
-            </p>
-            <Button 
-              size="lg" 
-              className="text-white font-semibold px-8 py-6 text-lg rounded-lg hover:opacity-90 transition-opacity shadow-lg"
-              style={{ backgroundColor: '#4AD2CC' }}
-            >
-              Get Started
-            </Button>
-          </div>
-        </section>
-
-        {/* Cards Section */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-            {/* For Patients Card */}
-            <Card className="border-none shadow-xl hover:shadow-2xl transition-shadow duration-300 bg-white">
-              <CardHeader className="text-center pb-4">
-                <div className="flex justify-center mb-4">
-                  <div className="p-4 rounded-full" style={{ backgroundColor: '#4A90E2', opacity: 0.1 }}>
-                    <Users className="h-12 w-12" style={{ color: '#4A90E2' }} />
-                  </div>
-                </div>
-                <CardTitle className="text-3xl font-bold mb-2" style={{ color: '#4A90E2' }}>
-                  For Patients
-                </CardTitle>
-                <CardDescription className="text-base" style={{ color: '#333333', opacity: 0.7 }}>
-                  Access world-class healthcare from the comfort of your home
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-center space-y-4">
-                <ul className="text-left space-y-3 mb-6" style={{ color: '#333333' }}>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4AD2CC' }}>✓</span>
-                    <span>Book appointments with verified doctors</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4AD2CC' }}>✓</span>
-                    <span>Access your medical records anytime</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4AD2CC' }}>✓</span>
-                    <span>Get online consultations and prescriptions</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4AD2CC' }}>✓</span>
-                    <span>Track your health journey with ease</span>
-                  </li>
-                </ul>
-                <div className="flex gap-3">
-                  <Button 
-                    className="flex-1 text-white font-semibold py-5 rounded-lg hover:opacity-90 transition-opacity"
-                    style={{ backgroundColor: '#4A90E2' }}
-                    onClick={() => window.location.href = '/patient/auth'}
-                  >
-                    Login
-                  </Button>
-                  <Button 
-                    className="flex-1 text-white font-semibold py-5 rounded-lg hover:opacity-90 transition-opacity"
-                    style={{ backgroundColor: '#4A90E2' }}
-                    onClick={() => window.location.href = '/patient/auth'}
-                  >
-                    Register
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* For Doctors Card */}
-            <Card className="border-none shadow-xl hover:shadow-2xl transition-shadow duration-300 bg-white">
-              <CardHeader className="text-center pb-4">
-                <div className="flex justify-center mb-4">
-                  <div className="p-4 rounded-full" style={{ backgroundColor: '#4AD2CC', opacity: 0.1 }}>
-                    <Stethoscope className="h-12 w-12" style={{ color: '#4AD2CC' }} />
-                  </div>
-                </div>
-                <CardTitle className="text-3xl font-bold mb-2" style={{ color: '#4AD2CC' }}>
-                  For Doctors
-                </CardTitle>
-                <CardDescription className="text-base" style={{ color: '#333333', opacity: 0.7 }}>
-                  Expand your practice and manage patients efficiently
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-center space-y-4">
-                <ul className="text-left space-y-3 mb-6" style={{ color: '#333333' }}>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4A90E2' }}>✓</span>
-                    <span>Manage appointments with ease</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4A90E2' }}>✓</span>
-                    <span>Digital prescription and record management</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4A90E2' }}>✓</span>
-                    <span>Video consultation capabilities</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={{ color: '#4A90E2' }}>✓</span>
-                    <span>Grow your practice with our platform</span>
-                  </li>
-                </ul>
-                <div className="flex gap-3">
-                  <Button 
-                    className="flex-1 text-white font-semibold py-5 rounded-lg hover:opacity-90 transition-opacity"
-                    style={{ backgroundColor: '#4AD2CC' }}
-                    onClick={() => window.location.href = '/doctor/auth'}
-                  >
-                    Login
-                  </Button>
-                  <Button 
-                    className="flex-1 text-white font-semibold py-5 rounded-lg hover:opacity-90 transition-opacity"
-                    style={{ backgroundColor: '#4AD2CC' }}
-                    onClick={() => window.location.href = '/doctor/auth'}
-                  >
-                    Register
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </section>
 
@@ -183,8 +134,8 @@ export default function MediBridgeHome() {
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="flex justify-center mb-4">
-                  <div className="p-3 rounded-full" style={{ backgroundColor: '#4A90E2', opacity: 0.1 }}>
-                    <Heart className="h-8 w-8" style={{ color: '#FF6B6B' }} />
+                  <div className="p-3 rounded-full" style={{ backgroundColor: '#4A90E2', opacity: 1 }}>
+                    <Heart className="h-8 w-8" style={{ color: '#ffffff' }} />
                   </div>
                 </div>
                 <h3 className="text-xl font-semibold mb-2" style={{ color: '#4A90E2' }}>
@@ -196,8 +147,10 @@ export default function MediBridgeHome() {
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-4">
-                  <div className="p-3 rounded-full" style={{ backgroundColor: '#4AD2CC', opacity: 0.1 }}>
-                    <Activity className="h-8 w-8" style={{ color: '#4AD2CC' }} />
+                  <div className="p-3 rounded-full" style={{ backgroundColor: '#4AD2CC', opacity: 1 }}>
+                    <svg className="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                    </svg>
                   </div>
                 </div>
                 <h3 className="text-xl font-semibold mb-2" style={{ color: '#4AD2CC' }}>
@@ -209,8 +162,10 @@ export default function MediBridgeHome() {
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-4">
-                  <div className="p-3 rounded-full" style={{ backgroundColor: '#4A90E2', opacity: 0.1 }}>
-                    <Stethoscope className="h-8 w-8" style={{ color: '#4A90E2' }} />
+                  <div className="p-3 rounded-full" style={{ backgroundColor: '#4A90E2', opacity: 1 }}>
+                    <svg className="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                    </svg>
                   </div>
                 </div>
                 <h3 className="text-xl font-semibold mb-2" style={{ color: '#4A90E2' }}>
@@ -224,61 +179,6 @@ export default function MediBridgeHome() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-white py-8 px-4 sm:px-6 lg:px-8 border-t">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 mb-6">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <Heart className="h-6 w-6" style={{ color: '#FF6B6B' }} />
-                <span className="text-xl font-bold" style={{ color: '#4A90E2' }}>
-                  MediBridge
-                </span>
-              </div>
-              <p className="text-sm" style={{ color: '#333333', opacity: 0.7 }}>
-                Connecting healthcare professionals with patients for better health outcomes.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3" style={{ color: '#333333' }}>Quick Links</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="hover:opacity-80 transition-opacity" style={{ color: '#4A90E2' }}>
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:opacity-80 transition-opacity" style={{ color: '#4A90E2' }}>
-                    Services
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:opacity-80 transition-opacity" style={{ color: '#4A90E2' }}>
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:opacity-80 transition-opacity" style={{ color: '#4A90E2' }}>
-                    Terms of Service
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3" style={{ color: '#333333' }}>Contact</h4>
-              <ul className="space-y-2 text-sm" style={{ color: '#333333', opacity: 0.7 }}>
-                <li>Email: support@medibridge.com</li>
-                <li>Phone: +1 (555) 123-4567</li>
-                <li>Address: 123 Health St, Medical City</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t pt-6 text-center text-sm" style={{ color: '#333333', opacity: 0.7 }}>
-            <p>&copy; 2025 MediBridge. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
