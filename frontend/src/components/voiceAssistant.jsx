@@ -60,6 +60,7 @@ const Dictaphone = () => {
     const prevTranscriptRef = useRef("");
     const api  = useApi();
 
+    const [mess, setMess] = useState('');
     const [language, setLanguage] = useState("en-US");
     const [aiResponse, setAiResponse] = useState("");
     const {
@@ -124,6 +125,7 @@ const Dictaphone = () => {
                 toast.success(message || "AI response received", {
                     duration: 10000
                 });
+                setMsg(message);
 
             } else {
                 toast.error(message || "Something went wrong while interpreting.");
@@ -262,7 +264,7 @@ const Dictaphone = () => {
                             </div>
                         </div>
                     )}
-                    {message && <TextToSpeech text={message}/>}
+                    {msg && <TextToSpeech text={msg}/>}
                     {/* Action Buttons */}
                     <div className="flex gap-4 pt-2">
                         <Button 
