@@ -9,6 +9,7 @@ import patientAuthRoutes from './routes/patient.routes.js';
 import visitorsRouter from './routes/visitors.routes.js';
 import hospitalsRouter from './routes/hospital.routes.js';
 import aiRouter from './routes/aiRouter.routes.js';
+import {getMedicationAnalytics} from './controllers/medication.controller.js';
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/api/v1/auth/patient', patientAuthRoutes);
 app.use('/api/v1/visitors', visitorsRouter);
 app.use('/api/v1/hospital', hospitalsRouter);
 app.use('/api/v1/ai', aiRouter);
+app.get('/api/v1/medication/analytics', getMedicationAnalytics);
 
 // app.use('/admin', adminRouter);
 
