@@ -34,8 +34,8 @@ const aiController = asyncHandler(async (req, res) => {
         .status(200)
         .json(
             new ApiResponse(
-                200,
-                'AI successfully processed the request',
+                response?.success,
+                response?.message,
                 response?.details
             )
         );
