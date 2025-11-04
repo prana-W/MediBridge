@@ -86,26 +86,6 @@ export default function DoctorAppointments() {
         }}></div>
       </div>
 
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-2">
-              <Heart className="h-8 w-8" style={{ color: '#FF6B6B' }} />
-              <span className="text-2xl font-bold" style={{ color: '#4A90E2' }}>
-                MediBridge
-              </span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Stethoscope className="h-6 w-6" style={{ color: '#4A90E2' }} />
-              <span className="text-lg font-semibold" style={{ color: '#333333' }}>
-                My Appointments
-              </span>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
