@@ -120,7 +120,16 @@ const Dictaphone = () => {
             if (success) {
                 console.log("✅ AI Response:", data);
                 setAiResponse(data?.response || "No response");
-                toast.success(message || "AI response received");
+                toast.success(message || "AI response received", {
+                    duration: 10000, // ⏱️ 6 seconds
+                    style: {
+                        background: "#1e293b", // slate-800
+                        color: "#fff",
+                        border: "1px solid #6366f1", // indigo border
+                        fontWeight: 500,
+                    },
+                    icon: "🤖",
+                });
             } else {
                 toast.error(message || "Something went wrong while interpreting.");
             }

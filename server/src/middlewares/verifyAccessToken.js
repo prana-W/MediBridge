@@ -10,7 +10,7 @@ const verifyAccessToken = async (req, res, next) => {
 
         console.log(req?.cookies);
 
-        if (!accessToken || accessToken === 'null') {
+        if (!accessToken) {
             throw new ApiError(
                 statusCode.UNAUTHORIZED,
                 'Access token is missing!'

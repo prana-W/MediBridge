@@ -34,6 +34,7 @@ export default function DoctorAppointments() {
       }
       
       const data = await response.json();
+        console.log(data);
       console.log('Appointments data:', data);
       
       setAppointments(data?.data || data || []);
@@ -163,7 +164,7 @@ export default function DoctorAppointments() {
                         {appointment.patient?.name || 'Patient Name'}
                       </CardTitle>
                       <p className="text-sm font-medium" style={{ color: '#4AD2CC' }}>
-                        Patient ID: {appointment.patient?.patientId || 'N/A'}
+                        Patient ID: {appointment.patient?._id || 'N/A'}
                       </p>
                       {appointment.patient?.age && (
                         <p className="text-xs mt-1" style={{ color: '#333333', opacity: 0.6 }}>
@@ -190,7 +191,7 @@ export default function DoctorAppointments() {
                     <div className="flex items-center">
                       <Clock className="h-5 w-5 mr-3" style={{ color: '#4A90E2' }} />
                       <span className="font-semibold" style={{ color: '#333333' }}>
-                        {formatTime(appointment.createdAt)}
+                        {8 + appointment?.doctor?.currSlot}:00
                       </span>
                     </div>
 

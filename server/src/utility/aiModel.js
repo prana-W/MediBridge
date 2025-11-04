@@ -44,7 +44,7 @@ function findBestHospital(hospitals, userInput) {
 
 async function processVoiceCommand(
     voiceText,
-    accessToken = '',
+    accessToken,
     baseURL = process.env.SERVER_URL
 ) {
     try {
@@ -218,8 +218,8 @@ Examples:
         const bookingResponse = await fetch(`${baseURL}/auth/doctor/bookSlot`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+                Cookie: `accessToken=${accessToken}`,
             },
             body: JSON.stringify({
                 doctorId: availableDoctor._id,
@@ -270,7 +270,7 @@ Examples:
 
 async function handleVoiceInput(
     voiceText,
-    accessToken = '',
+    accessToken,
     baseURL = process.env.SERVER_URL
 ) {
     console.log(`Processing: "${voiceText}"`);
