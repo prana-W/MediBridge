@@ -189,7 +189,7 @@ export default function PatientAppointments() {
                     <div className="flex items-center">
                       <Clock className="h-5 w-5 mr-3" style={{ color: '#4A90E2' }} />
                       <span className="font-semibold" style={{ color: '#333333' }}>
-                        {formatTime(appointment.createdAt)}
+                        {(8 + appointment?.doctor?.currSlot) + ":00"}
                       </span>
                     </div>
 
