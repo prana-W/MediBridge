@@ -53,40 +53,7 @@ function Loader() {
 export default function MediBridgeHome() {
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F2F2F2' }}>
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-2">
-              <Heart className="h-8 w-8" style={{ color: '#FF6B6B' }} />
-              <span className="text-2xl font-bold" style={{ color: '#4A90E2' }}>
-                MediBridge
-              </span>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <button className="font-medium transition-all hover:opacity-80 hover:scale-105" style={{ color: '#4A90E2' }}>
-                Home
-              </button>
-              <button className="font-medium transition-all hover:opacity-80 hover:scale-105" style={{ color: '#333333' }}>
-                Doctor
-              </button>
-              <button className="font-medium transition-all hover:opacity-80 hover:scale-105" style={{ color: '#333333' }}>
-                Patient
-              </button>
-              <button className="font-medium transition-all hover:opacity-80 hover:scale-105" style={{ color: '#333333' }}>
-                Contact
-              </button>
-            </nav>
-            <button className="md:hidden" style={{ color: '#4A90E2' }}>
-              <svg className="h-6 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </header>
 
-      {/* Hero Section with Grid Background */}
       <main className="flex-grow">
         <section className="relative min-h-[calc(100vh-80px)] overflow-hidden" style={{ backgroundColor: '#4AD2CC' }}>
           {/* Grid Background Pattern */}

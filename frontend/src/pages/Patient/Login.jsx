@@ -12,10 +12,15 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { User, Phone, Lock, MapPin, Stethoscope } from "lucide-react";
+import {data, useNavigate} from 'react-router-dom';
+import {toast} from 'sonner';
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
 
 export default function PatientAuth() {
+
+    const navigate = useNavigate();
+
     const [isLogin, setIsLogin] = useState(true);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ type: "", text: "" });
@@ -49,14 +54,24 @@ export default function PatientAuth() {
 
             const data = await res.json();
             if (res.ok) {
+
+                toast.success(data?.message)
+                localStorage.setItem("role", 'patient');
                 setMessage({ type: "success", text: data.message || "Login successful!" });
+                window.location.href = '/';
+
             } else {
                 setMessage({ type: "error", text: data.message || "Login failed!" });
+
+
             }
-        } catch {
+        } catch(err) {
             setMessage({ type: "error", text: "Network error. Please try again." });
+
+
         } finally {
             setLoading(false);
+
         }
     };
 

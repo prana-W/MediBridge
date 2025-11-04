@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Stethoscope, Mail, Lock, User, Building2, CreditCard, Calendar, Search, Heart, Activity } from 'lucide-react';
+import {toast} from 'sonner';
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -114,11 +115,27 @@ export default function DoctorAuth() {
         })
             .then(response => response.json().then(data => ({ status: response.ok, data })))
             .then(({ status, data }) => {
-                if (status) setMessage({ type: 'success', text: data.message || 'Login successful!' });
-                else setMessage({ type: 'error', text: data.message || 'Login failed!' });
+                if (status) {
+                    setMessage({
+                        type: 'success',
+                        text: data.message || 'Login successful!',
+                    });
+                    localStorage.setItem('role', "doctor");
+                    toast.success(data.message || 'Login successful!');
+                    window.location.href = '/';
+                }
+                else {
+                    setMessage({
+                        type: 'error',
+                        text: data.message || 'Login failed!',
+                    });
+
+                }
                 setLoading(false);
+
             })
-            .catch(() => {
+            .catch((err) => {
+
                 setMessage({ type: 'error', text: 'Network error. Please try again.' });
                 setLoading(false);
             });
@@ -226,7 +243,7 @@ export default function DoctorAuth() {
                             <div className="space-y-5">
                                 <div className="space-y-2">
                                     <Label className="text-base font-semibold text-[#333333]">
-                                        Email or Phone Number
+                                        Email
                                     </Label>
                                     <div className="relative">
                                         <Mail className="absolute left-3 top-3.5 h-5 w-5 text-[#4AD2CC]" />
