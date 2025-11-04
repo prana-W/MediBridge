@@ -147,21 +147,20 @@ export default function MediBridgeFooter() {
               </ul>
             </div>
 
-            {/* Contact */}
             <div>
               <h4 className="font-semibold text-lg mb-4">Contact Us</h4>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start space-x-2 opacity-90">
                   <Mail className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                  <span>support@medibridge.com</span>
+                  <span>pranaw.kr.dev@gmail.com</span>
                 </li>
                 <li className="flex items-start space-x-2 opacity-90">
                   <Phone className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>+91 8960858785</span>
                 </li>
                 <li className="flex items-start space-x-2 opacity-90">
                   <MapPin className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                  <span>123 Health St, Medical City, MC 12345</span>
+                  <span>National Institute of Technology, Jamshedpur</span>
                 </li>
               </ul>
             </div>
