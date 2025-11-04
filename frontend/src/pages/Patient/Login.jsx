@@ -57,7 +57,7 @@ export default function PatientAuth() {
             });
     };
 
-    const handleSignupSubmit = (e) => {
+    const handleSignupSubmit = () => {
         e.preventDefault();
         setMessage({ type: "", text: "" });
 
@@ -95,19 +95,14 @@ export default function PatientAuth() {
 
     return (
         <div
-            className="relative min-h-screen flex items-center justify-center overflow-hidden"
+            className="min-h-screen flex items-center justify-center p-4"
             style={{ backgroundColor: "#F2F2F2" }}
         >
-            {/* Animated Background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#4A90E2] via-[#4AD2CC] to-[#4A90E2] opacity-20 blur-3xl animate-gradient" />
-            <div className="absolute top-10 left-10 w-72 h-72 bg-[#4AD2CC]/30 rounded-full blur-3xl animate-pulse-glow"></div>
-            <div className="absolute bottom-10 right-10 w-72 h-72 bg-[#4A90E2]/20 rounded-full blur-3xl animate-pulse-glow"></div>
-
-            <Card className="relative w-full max-w-2xl shadow-2xl border-none bg-white/80 backdrop-blur-md transition-all duration-500 hover:shadow-[0_0_40px_rgba(74,210,204,0.3)] hover:-translate-y-1 animate-fade-in-up">
+            <Card className="w-full max-w-2xl shadow-2xl border-none bg-white transition-all duration-300 hover:shadow-3xl">
                 <CardHeader className="space-y-3 pb-6">
                     <div className="flex items-center justify-center mb-2">
                         <div
-                            className="p-4 rounded-full shadow-md transition-transform duration-300 hover:scale-110"
+                            className="p-4 rounded-full transition-transform duration-300 hover:scale-110"
                             style={{ backgroundColor: "#4AD2CC" }}
                         >
                             <Stethoscope className="w-10 h-10 text-white" />
@@ -129,7 +124,7 @@ export default function PatientAuth() {
                     </CardDescription>
                 </CardHeader>
 
-                <CardContent className="transition-all duration-500">
+                <CardContent>
                     {message.text && (
                         <Alert
                             className={`mb-6 border-none transition-all duration-300 ${
@@ -148,34 +143,21 @@ export default function PatientAuth() {
                         </Alert>
                     )}
 
-                    {/* LOGIN FORM */}
                     {isLogin ? (
-                        <form
-                            onSubmit={handleLoginSubmit}
-                            className="space-y-5 animate-fade-in-up"
-                        >
+                        <form onSubmit={handleLoginSubmit} className="space-y-5">
                             <div className="space-y-2">
-                                <Label
-                                    className="text-sm font-semibold"
-                                    style={{ color: "#333333" }}
-                                >
+                                <Label className="text-sm font-semibold" style={{ color: "#333333" }}>
                                     Phone Number
                                 </Label>
                                 <div className="relative">
-                                    <Phone
-                                        className="absolute left-3 top-3 h-5 w-5"
-                                        style={{ color: "#4AD2CC" }}
-                                    />
+                                    <Phone className="absolute left-3 top-3 h-5 w-5" style={{ color: "#4AD2CC" }} />
                                     <Input
                                         placeholder="Enter phone number"
                                         className="pl-10 py-6 border-gray-200 focus:ring-2 transition-all duration-200"
                                         style={{ borderColor: "#E5E5E5" }}
                                         value={loginForm.phoneNumber}
                                         onChange={(e) =>
-                                            setLoginForm((prev) => ({
-                                                ...prev,
-                                                phoneNumber: e.target.value,
-                                            }))
+                                            setLoginForm((prev) => ({ ...prev, phoneNumber: e.target.value }))
                                         }
                                         required
                                     />
@@ -183,17 +165,11 @@ export default function PatientAuth() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label
-                                    className="text-sm font-semibold"
-                                    style={{ color: "#333333" }}
-                                >
+                                <Label className="text-sm font-semibold" style={{ color: "#333333" }}>
                                     Password
                                 </Label>
                                 <div className="relative">
-                                    <Lock
-                                        className="absolute left-3 top-3 h-5 w-5"
-                                        style={{ color: "#4AD2CC" }}
-                                    />
+                                    <Lock className="absolute left-3 top-3 h-5 w-5" style={{ color: "#4AD2CC" }} />
                                     <Input
                                         type="password"
                                         placeholder="••••••••"
@@ -201,10 +177,7 @@ export default function PatientAuth() {
                                         style={{ borderColor: "#E5E5E5" }}
                                         value={loginForm.password}
                                         onChange={(e) =>
-                                            setLoginForm((prev) => ({
-                                                ...prev,
-                                                password: e.target.value,
-                                            }))
+                                            setLoginForm((prev) => ({ ...prev, password: e.target.value }))
                                         }
                                         required
                                     />
@@ -221,11 +194,7 @@ export default function PatientAuth() {
                             </Button>
                         </form>
                     ) : (
-                        /* SIGNUP FORM */
-                        <form
-                            onSubmit={handleSignupSubmit}
-                            className="space-y-5 animate-fade-in-up"
-                        >
+                        <form onSubmit={handleSignupSubmit} className="space-y-5">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label className="text-sm font-semibold" style={{ color: "#333333" }}>
