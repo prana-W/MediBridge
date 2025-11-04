@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 
 export default function Header() {
     const [role, setRole] = useState(null);
@@ -11,11 +11,13 @@ export default function Header() {
 
     const handleLogout = async () => {
         try {
-
-            const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/${role}/logout`, {
-                method: 'POST',
-                credentials: 'include'
-            });
+            const res = await fetch(
+                `${import.meta.env.VITE_SERVER_URL}/${role}/logout`,
+                {
+                    method: 'POST',
+                    credentials: 'include',
+                }
+            );
 
             if (!res.ok) {
                 console.error('Logout failed on server');
@@ -113,7 +115,10 @@ export default function Header() {
         <header className="bg-white shadow-md">
             <nav className="container mx-auto px-6 py-4">
                 <div className="flex items-center justify-between">
-                    <div className="text-2xl font-bold text-blue-600 cursor-pointer" onClick={() => navigateTo('/')}>
+                    <div
+                        className="text-2xl font-bold text-blue-600 cursor-pointer"
+                        onClick={() => navigateTo('/')}
+                    >
                         MediBridge
                     </div>
                     <div className="flex items-center space-x-4">

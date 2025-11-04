@@ -1,6 +1,6 @@
 import {Home, About, NotFound} from './pages';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
-import { ThemeProvider } from "@/components/theme-provider"
+import {ThemeProvider} from '@/components/theme-provider';
 import Layout from './Layout.jsx';
 import MediBridgeHome from './pages/Home.jsx';
 import DoctorLogin from './pages/Doctor/Login.jsx';
@@ -54,9 +54,9 @@ const router = createBrowserRouter([
 function App() {
     return (
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <ErrorBoundary>
-            <RouterProvider router={router} />
-        </ErrorBoundary>
+            <ErrorBoundary>
+                <RouterProvider router={router} />
+            </ErrorBoundary>
         </ThemeProvider>
     );
 }

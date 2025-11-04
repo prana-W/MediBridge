@@ -7,12 +7,10 @@ const getAllAppointments = asyncHandler(async (req, res) => {
 
     const appointments = await Appointment.find({
         doctor: doctorId,
-        nextCheckup: { $ne: null }
+        nextCheckup: {$ne: null},
     })
         .populate('patient')
         .populate('doctor');
-
-
 
     if (!appointments) {
         throw new ApiError(statusCode.NOT_FOUND, 'No Appointment was found!');

@@ -1,7 +1,7 @@
-"use client";
-import { useState, useEffect, useRef } from "react";
+'use client';
+import {useState, useEffect, useRef} from 'react';
 
-export default function TextToSpeech({ text }) {
+export default function TextToSpeech({text}) {
     const [voices, setVoices] = useState([]);
     const utteranceRef = useRef(null);
 

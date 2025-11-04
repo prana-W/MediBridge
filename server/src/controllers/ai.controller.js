@@ -31,7 +31,6 @@ const aiController = asyncHandler(async (req, res) => {
     );
 
     if (language === 'en-US') {
-
         return res
             .status(200)
             .json(
@@ -41,10 +40,7 @@ const aiController = asyncHandler(async (req, res) => {
                     response?.details
                 )
             );
-
-    }
-
-    else {
+    } else {
         return res
             .status(200)
             .json(
@@ -55,8 +51,6 @@ const aiController = asyncHandler(async (req, res) => {
                 )
             );
     }
-
-
 });
 
 export {aiController};

@@ -218,7 +218,7 @@ Examples:
         const bookingResponse = await fetch(`${baseURL}/auth/doctor/bookSlot`, {
             method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
                 Cookie: `accessToken=${accessToken}`,
             },
             body: JSON.stringify({
@@ -257,8 +257,7 @@ Examples:
                 symptoms: analysis.symptoms,
                 reasoning: analysis.reasoning,
             },
-        }
-
+        };
     } catch (error) {
         console.error('Error processing voice command:', error);
         return {
