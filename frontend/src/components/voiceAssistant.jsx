@@ -60,7 +60,7 @@ const Dictaphone = () => {
     const prevTranscriptRef = useRef("");
     const api  = useApi();
 
-    const [mess, setMess] = useState('');
+    const [msg, setMsg] = useState('');
     const [language, setLanguage] = useState("en-US");
     const [aiResponse, setAiResponse] = useState("");
     const {
