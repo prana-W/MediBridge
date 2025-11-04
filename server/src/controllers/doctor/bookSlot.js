@@ -4,7 +4,8 @@ import Doctor from '../../models/doctor.model.js';
 import Appointment from '../../models/appointment.model.js';
 
 const bookSlot = asyncHandler(async (req, res) => {
-    const {doctorId, slotNumber, patientId} = req.body;
+    const {doctorId, slotNumber } = req.body;
+    const patientId = req?.userId;
 
     if (!doctorId || slotNumber === undefined) {
         throw new ApiError(
@@ -52,6 +53,7 @@ const bookSlot = asyncHandler(async (req, res) => {
         patient: patientId,
         doctor: doctorId,
         isCheckupComplete: false,
+        nextCheckup: new Date(),
         remarks: `Slot ${slotNumber + 1} booked for ${doctor.name}`,
     });
 

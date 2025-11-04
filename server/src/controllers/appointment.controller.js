@@ -44,8 +44,10 @@ const finalizeAppointment = asyncHandler(async (req, res) => {
 });
 
 const getAllAppointments = asyncHandler(async (req, res) => {
-    const patientId = req?._id;
 
+    const patientId = req?.userId;
+
+    // console.log(patientId);
     const appointments = await Appointment.find({patient: patientId});
 
     if (!appointments) {

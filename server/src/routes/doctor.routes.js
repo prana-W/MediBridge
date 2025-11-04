@@ -16,7 +16,7 @@ authRouter.route('/login').post(loginDoctor);
 authRouter.route('/logout').post(verifyAccessToken, logoutDoctor);
 
 authRouter.route('/getSlots').post(getSlots);
-authRouter.route('/bookSlot').post(bookSlot);
+authRouter.route('/bookSlot').post(verifyAccessToken, bookSlot);
 
 authRouter.route('/appointments').get(verifyAccessToken, getAllAppointments);
 

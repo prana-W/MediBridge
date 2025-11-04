@@ -140,7 +140,7 @@ try {
             credentials: "include",
             body: JSON.stringify({
                 doctorId: selectedDoctor._id,
-                slotNumber: parseInt(selectedSlot),
+                slotNumber: parseInt(selectedSlot)
             }),
         }
     );
