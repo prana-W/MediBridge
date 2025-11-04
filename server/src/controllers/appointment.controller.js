@@ -44,11 +44,12 @@ const finalizeAppointment = asyncHandler(async (req, res) => {
 });
 
 const getAllAppointments = asyncHandler(async (req, res) => {
-
     const patientId = req?.userId;
 
     // console.log(patientId);
-    const appointments = await Appointment.find({patient: patientId}).populate('doctor');
+    const appointments = await Appointment.find({patient: patientId}).populate(
+        'doctor'
+    );
 
     if (!appointments) {
         throw new ApiError(statusCode.NOT_FOUND, 'No Appointment was found!');

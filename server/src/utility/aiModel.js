@@ -218,7 +218,7 @@ Examples:
         const bookingResponse = await fetch(`${baseURL}/auth/doctor/bookSlot`, {
             method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
                 Cookie: `accessToken=${accessToken}`,
             },
             body: JSON.stringify({
@@ -247,6 +247,7 @@ Examples:
         return {
             success: true,
             message: `Appointment booked successfully! Your appointment is at ${matchedHospital.name} with Dr. ${availableDoctor.name} (${analysis.suggestedDepartment} department) at slot ${availableDoctor.currentSlot} (${timeFormat}).`,
+            message_hi: `अपॉइंटमेंट सफलतापूर्वक बुक हो गया! आपकी अपॉइंटमेंट ${matchedHospital.name} में डॉ. ${availableDoctor.name} (${analysis.suggestedDepartment} विभाग) के साथ स्लॉट ${availableDoctor.currentSlot} (${timeFormat}) पर है।`,
             details: {
                 hospital: matchedHospital.name,
                 doctor: availableDoctor.name,

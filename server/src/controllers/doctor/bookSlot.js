@@ -4,7 +4,7 @@ import Doctor from '../../models/doctor.model.js';
 import Appointment from '../../models/appointment.model.js';
 
 const bookSlot = asyncHandler(async (req, res) => {
-    const {doctorId, slotNumber } = req.body;
+    const {doctorId, slotNumber} = req.body;
     const patientId = req?.userId;
 
     if (!doctorId || slotNumber === undefined) {

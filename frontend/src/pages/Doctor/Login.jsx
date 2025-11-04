@@ -1,56 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Stethoscope, Mail, Lock, User, Building2, CreditCard, Calendar, Search, Heart, Activity } from 'lucide-react';
+import React, {useState, useEffect} from 'react';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import {Input} from '@/components/ui/input';
+import {Button} from '@/components/ui/button';
+import {Label} from '@/components/ui/label';
+import {Alert, AlertDescription} from '@/components/ui/alert';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
+    Stethoscope,
+    Mail,
+    Lock,
+    User,
+    Building2,
+    CreditCard,
+    Calendar,
+    Search,
+    Heart,
+    Activity,
+} from 'lucide-react';
 import {toast} from 'sonner';
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_URL;
 
 // Heartbeat Animation Component
 function HeartbeatLine() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 150 40"
-      preserveAspectRatio="none"
-      className="absolute w-full h-20 stroke-[#4AD2CC] opacity-20"
-      style={{ top: '50%', transform: 'translateY(-50%)' }}
-    >
-      <polyline
-        fill="none"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeDasharray="220"
-        strokeDashoffset="220"
-        points="0,20 20,20 25,15 30,25 40,20 60,20 65,5 70,35 75,20 95,20 100,15 110,20 150,20"
-      >
-        <animate
-          attributeName="stroke-dashoffset"
-          values="220;0"
-          dur="2s"
-          repeatCount="indefinite"
-        />
-      </polyline>
-    </svg>
-  );
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 150 40"
+            preserveAspectRatio="none"
+            className="absolute w-full h-20 stroke-[#4AD2CC] opacity-20"
+            style={{top: '50%', transform: 'translateY(-50%)'}}
+        >
+            <polyline
+                fill="none"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeDasharray="220"
+                strokeDashoffset="220"
+                points="0,20 20,20 25,15 30,25 40,20 60,20 65,5 70,35 75,20 95,20 100,15 110,20 150,20"
+            >
+                <animate
+                    attributeName="stroke-dashoffset"
+                    values="220;0"
+                    dur="2s"
+                    repeatCount="indefinite"
+                />
+            </polyline>
+        </svg>
+    );
 }
 
 export default function DoctorAuth() {
     const [isLogin, setIsLogin] = useState(true);
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({ type: '', text: '' });
+    const [message, setMessage] = useState({type: '', text: ''});
     const [hospitals, setHospitals] = useState([]);
     const [filteredHospitals, setFilteredHospitals] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
     const [loginForm, setLoginForm] = useState({
         email: '',
-        password: ''
+        password: '',
     });
 
     const [signupForm, setSignupForm] = useState({
@@ -61,7 +85,7 @@ export default function DoctorAuth() {
         workingDays: [],
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
     });
 
     const departments = [
@@ -72,17 +96,25 @@ export default function DoctorAuth() {
         'orthopedic',
         'pediatrician',
         'neurologist',
-        'dentist'
+        'dentist',
     ];
 
-    const weekDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const weekDays = [
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+    ];
 
     useEffect(() => {
         const fetchHospitals = async () => {
             try {
                 const res = await fetch(`${API_BASE_URL}/hospital/all`, {
                     method: 'GET',
-                    credentials: 'include'
+                    credentials: 'include',
                 });
                 if (!res.ok) throw new Error('Failed to fetch hospitals');
                 const data = await res.json();
@@ -96,7 +128,7 @@ export default function DoctorAuth() {
     }, []);
 
     useEffect(() => {
-        const filtered = hospitals.filter(h =>
+        const filtered = hospitals.filter((h) =>
             h.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredHospitals(filtered);
@@ -104,87 +136,102 @@ export default function DoctorAuth() {
 
     const handleLoginSubmit = (e) => {
         e.preventDefault();
-        setMessage({ type: '', text: '' });
+        setMessage({type: '', text: ''});
         setLoading(true);
 
         fetch(`${API_BASE_URL}/auth/doctor/login`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             credentials: 'include',
-            body: JSON.stringify(loginForm)
+            body: JSON.stringify(loginForm),
         })
-            .then(response => response.json().then(data => ({ status: response.ok, data })))
-            .then(({ status, data }) => {
+            .then((response) =>
+                response.json().then((data) => ({status: response.ok, data}))
+            )
+            .then(({status, data}) => {
                 if (status) {
                     setMessage({
                         type: 'success',
                         text: data.message || 'Login successful!',
                     });
-                    localStorage.setItem('role', "doctor");
+                    localStorage.setItem('role', 'doctor');
                     toast.success(data.message || 'Login successful!');
                     window.location.href = '/';
-                }
-                else {
+                } else {
                     setMessage({
                         type: 'error',
                         text: data.message || 'Login failed!',
                     });
-
                 }
                 setLoading(false);
-
             })
             .catch((err) => {
-
-                setMessage({ type: 'error', text: 'Network error. Please try again.' });
+                setMessage({
+                    type: 'error',
+                    text: 'Network error. Please try again.',
+                });
                 setLoading(false);
             });
     };
 
     const handleSignupSubmit = (e) => {
         e.preventDefault();
-        setMessage({ type: '', text: '' });
+        setMessage({type: '', text: ''});
 
         if (signupForm.password !== signupForm.confirmPassword) {
-            setMessage({ type: 'error', text: 'Passwords do not match!' });
+            setMessage({type: 'error', text: 'Passwords do not match!'});
             return;
         }
 
         if (signupForm.workingDays.length === 0) {
-            setMessage({ type: 'error', text: 'Please select at least one working day!' });
+            setMessage({
+                type: 'error',
+                text: 'Please select at least one working day!',
+            });
             return;
         }
 
         setLoading(true);
-        const { confirmPassword, ...signupData } = signupForm;
+        const {confirmPassword, ...signupData} = signupForm;
 
         fetch(`${API_BASE_URL}/auth/doctor/signup`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(signupData)
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(signupData),
         })
-            .then(response => response.json().then(data => ({ status: response.ok, data })))
-            .then(({ status, data }) => {
+            .then((response) =>
+                response.json().then((data) => ({status: response.ok, data}))
+            )
+            .then(({status, data}) => {
                 if (status) {
-                    setMessage({ type: 'success', text: data.message || 'Registration successful!' });
+                    setMessage({
+                        type: 'success',
+                        text: data.message || 'Registration successful!',
+                    });
                     setTimeout(() => setIsLogin(true), 2000);
                 } else {
-                    setMessage({ type: 'error', text: data.message || 'Registration failed!' });
+                    setMessage({
+                        type: 'error',
+                        text: data.message || 'Registration failed!',
+                    });
                 }
                 setLoading(false);
             })
             .catch(() => {
-                setMessage({ type: 'error', text: 'Network error. Please try again.' });
+                setMessage({
+                    type: 'error',
+                    text: 'Network error. Please try again.',
+                });
                 setLoading(false);
             });
     };
 
     const toggleWorkingDay = (day) => {
-        setSignupForm(prev => ({
+        setSignupForm((prev) => ({
             ...prev,
             workingDays: prev.workingDays.includes(day)
-                ? prev.workingDays.filter(d => d !== day)
-                : [...prev.workingDays, day]
+                ? prev.workingDays.filter((d) => d !== day)
+                : [...prev.workingDays, day],
         }));
     };
 
@@ -196,7 +243,7 @@ export default function DoctorAuth() {
                     className="h-full w-full"
                     style={{
                         backgroundImage: `linear-gradient(#4A90E2 1px, transparent 1px), linear-gradient(90deg, #4A90E2 1px, transparent 1px)`,
-                        backgroundSize: "50px 50px",
+                        backgroundSize: '50px 50px',
                     }}
                 ></div>
             </div>
@@ -226,14 +273,20 @@ export default function DoctorAuth() {
 
                     <CardContent>
                         {message.text && (
-                            <Alert className={`mb-6 border-2 transition-all duration-300 ${
-                                message.type === 'success' 
-                                    ? 'bg-green-50 border-green-200' 
-                                    : 'bg-red-50 border-red-200'
-                            }`}>
-                                <AlertDescription className={`font-medium ${
-                                    message.type === 'success' ? 'text-green-700' : 'text-red-700'
-                                }`}>
+                            <Alert
+                                className={`mb-6 border-2 transition-all duration-300 ${
+                                    message.type === 'success'
+                                        ? 'bg-green-50 border-green-200'
+                                        : 'bg-red-50 border-red-200'
+                                }`}
+                            >
+                                <AlertDescription
+                                    className={`font-medium ${
+                                        message.type === 'success'
+                                            ? 'text-green-700'
+                                            : 'text-red-700'
+                                    }`}
+                                >
                                     {message.text}
                                 </AlertDescription>
                             </Alert>
@@ -251,7 +304,12 @@ export default function DoctorAuth() {
                                             placeholder="doctor@hospital.com"
                                             className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4AD2CC]/30 hover:border-[#4AD2CC] transition-all duration-300 text-base bg-white hover:shadow-lg"
                                             value={loginForm.email}
-                                            onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
+                                            onChange={(e) =>
+                                                setLoginForm((prev) => ({
+                                                    ...prev,
+                                                    email: e.target.value,
+                                                }))
+                                            }
                                             required
                                         />
                                     </div>
@@ -268,13 +326,18 @@ export default function DoctorAuth() {
                                             placeholder="••••••••"
                                             className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4AD2CC]/30 hover:border-[#4AD2CC] transition-all duration-300 text-base bg-white hover:shadow-lg"
                                             value={loginForm.password}
-                                            onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
+                                            onChange={(e) =>
+                                                setLoginForm((prev) => ({
+                                                    ...prev,
+                                                    password: e.target.value,
+                                                }))
+                                            }
                                             required
                                         />
                                     </div>
                                 </div>
 
-                                <Button 
+                                <Button
                                     onClick={handleLoginSubmit}
                                     className="w-full h-14 bg-gradient-to-r from-[#4AD2CC] to-[#3BB5AF] hover:from-[#3BB5AF] hover:to-[#4AD2CC] text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
                                     disabled={loading}
@@ -295,7 +358,12 @@ export default function DoctorAuth() {
                                                 placeholder="Dr. John Doe"
                                                 className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg"
                                                 value={signupForm.name}
-                                                onChange={(e) => setSignupForm(prev => ({ ...prev, name: e.target.value }))}
+                                                onChange={(e) =>
+                                                    setSignupForm((prev) => ({
+                                                        ...prev,
+                                                        name: e.target.value,
+                                                    }))
+                                                }
                                                 required
                                             />
                                         </div>
@@ -307,15 +375,26 @@ export default function DoctorAuth() {
                                         </Label>
                                         <Select
                                             value={signupForm.department}
-                                            onValueChange={(value) => setSignupForm(prev => ({ ...prev, department: value }))}
+                                            onValueChange={(value) =>
+                                                setSignupForm((prev) => ({
+                                                    ...prev,
+                                                    department: value,
+                                                }))
+                                            }
                                         >
                                             <SelectTrigger className="h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg">
                                                 <SelectValue placeholder="Select department" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {departments.map(dept => (
-                                                    <SelectItem key={dept} value={dept}>
-                                                        {dept.charAt(0).toUpperCase() + dept.slice(1)}
+                                                {departments.map((dept) => (
+                                                    <SelectItem
+                                                        key={dept}
+                                                        value={dept}
+                                                    >
+                                                        {dept
+                                                            .charAt(0)
+                                                            .toUpperCase() +
+                                                            dept.slice(1)}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -328,7 +407,12 @@ export default function DoctorAuth() {
                                         </Label>
                                         <Select
                                             value={signupForm.hospital}
-                                            onValueChange={(value) => setSignupForm(prev => ({ ...prev, hospital: value }))}
+                                            onValueChange={(value) =>
+                                                setSignupForm((prev) => ({
+                                                    ...prev,
+                                                    hospital: value,
+                                                }))
+                                            }
                                         >
                                             <SelectTrigger className="h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg">
                                                 <SelectValue placeholder="Select hospital" />
@@ -342,17 +426,39 @@ export default function DoctorAuth() {
                                                             placeholder="Search hospital..."
                                                             className="pl-9 text-sm"
                                                             value={searchTerm}
-                                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                                            onChange={(e) =>
+                                                                setSearchTerm(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                         />
                                                     </div>
-                                                    {filteredHospitals.length > 0 ? (
-                                                        filteredHospitals.map((hospital, idx) => (
-                                                            <SelectItem key={idx} value={hospital.name}>
-                                                                {hospital.name} ({hospital.state})
-                                                            </SelectItem>
-                                                        ))
+                                                    {filteredHospitals.length >
+                                                    0 ? (
+                                                        filteredHospitals.map(
+                                                            (hospital, idx) => (
+                                                                <SelectItem
+                                                                    key={idx}
+                                                                    value={
+                                                                        hospital.name
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        hospital.name
+                                                                    }{' '}
+                                                                    (
+                                                                    {
+                                                                        hospital.state
+                                                                    }
+                                                                    )
+                                                                </SelectItem>
+                                                            )
+                                                        )
                                                     ) : (
-                                                        <p className="text-gray-500 text-sm px-2">No hospitals found</p>
+                                                        <p className="text-gray-500 text-sm px-2">
+                                                            No hospitals found
+                                                        </p>
                                                     )}
                                                 </div>
                                             </SelectContent>
@@ -369,7 +475,13 @@ export default function DoctorAuth() {
                                                 placeholder="MED123456"
                                                 className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg"
                                                 value={signupForm.idCardNumber}
-                                                onChange={(e) => setSignupForm(prev => ({ ...prev, idCardNumber: e.target.value }))}
+                                                onChange={(e) =>
+                                                    setSignupForm((prev) => ({
+                                                        ...prev,
+                                                        idCardNumber:
+                                                            e.target.value,
+                                                    }))
+                                                }
                                                 required
                                             />
                                         </div>
@@ -386,7 +498,12 @@ export default function DoctorAuth() {
                                                 placeholder="doctor@hospital.com"
                                                 className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg"
                                                 value={signupForm.email}
-                                                onChange={(e) => setSignupForm(prev => ({ ...prev, email: e.target.value }))}
+                                                onChange={(e) =>
+                                                    setSignupForm((prev) => ({
+                                                        ...prev,
+                                                        email: e.target.value,
+                                                    }))
+                                                }
                                                 required
                                             />
                                         </div>
@@ -403,7 +520,13 @@ export default function DoctorAuth() {
                                                 placeholder="••••••••"
                                                 className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg"
                                                 value={signupForm.password}
-                                                onChange={(e) => setSignupForm(prev => ({ ...prev, password: e.target.value }))}
+                                                onChange={(e) =>
+                                                    setSignupForm((prev) => ({
+                                                        ...prev,
+                                                        password:
+                                                            e.target.value,
+                                                    }))
+                                                }
                                                 required
                                             />
                                         </div>
@@ -419,8 +542,16 @@ export default function DoctorAuth() {
                                                 type="password"
                                                 placeholder="••••••••"
                                                 className="pl-10 h-12 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-[#4A90E2]/30 hover:border-[#4A90E2] transition-all duration-300 text-base bg-white hover:shadow-lg"
-                                                value={signupForm.confirmPassword}
-                                                onChange={(e) => setSignupForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                                                value={
+                                                    signupForm.confirmPassword
+                                                }
+                                                onChange={(e) =>
+                                                    setSignupForm((prev) => ({
+                                                        ...prev,
+                                                        confirmPassword:
+                                                            e.target.value,
+                                                    }))
+                                                }
                                                 required
                                             />
                                         </div>
@@ -433,16 +564,20 @@ export default function DoctorAuth() {
                                         Working Days
                                     </Label>
                                     <div className="grid grid-cols-4 gap-2">
-                                        {weekDays.map(day => (
+                                        {weekDays.map((day) => (
                                             <Button
                                                 key={day}
                                                 type="button"
                                                 className={`text-sm font-semibold h-12 rounded-xl transition-all duration-300 hover:scale-105 ${
-                                                    signupForm.workingDays.includes(day) 
-                                                        ? 'bg-gradient-to-br from-[#4A90E2] to-[#357ABD] text-white shadow-lg hover:shadow-xl' 
+                                                    signupForm.workingDays.includes(
+                                                        day
+                                                    )
+                                                        ? 'bg-gradient-to-br from-[#4A90E2] to-[#357ABD] text-white shadow-lg hover:shadow-xl'
                                                         : 'bg-white hover:bg-gray-50 text-[#333333] border-2 border-gray-300 hover:border-[#4A90E2]'
                                                 }`}
-                                                onClick={() => toggleWorkingDay(day)}
+                                                onClick={() =>
+                                                    toggleWorkingDay(day)
+                                                }
                                             >
                                                 {day.slice(0, 3).toUpperCase()}
                                             </Button>
@@ -450,12 +585,14 @@ export default function DoctorAuth() {
                                     </div>
                                 </div>
 
-                                <Button 
+                                <Button
                                     onClick={handleSignupSubmit}
                                     className="w-full h-14 bg-gradient-to-r from-[#4AD2CC] to-[#3BB5AF] hover:from-[#3BB5AF] hover:to-[#4AD2CC] text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
                                     disabled={loading}
                                 >
-                                    {loading ? 'Creating Account...' : 'Create Account'}
+                                    {loading
+                                        ? 'Creating Account...'
+                                        : 'Create Account'}
                                 </Button>
                             </div>
                         )}
@@ -463,13 +600,15 @@ export default function DoctorAuth() {
 
                     <CardFooter className="flex flex-col space-y-3 pt-6">
                         <div className="text-sm text-center text-gray-600">
-                            {isLogin ? "Don't have an account? " : 'Already have an account? '}
+                            {isLogin
+                                ? "Don't have an account? "
+                                : 'Already have an account? '}
                             <button
                                 type="button"
                                 className="font-semibold hover:underline transition-all duration-200 text-[#4AD2CC]"
                                 onClick={() => {
                                     setIsLogin(!isLogin);
-                                    setMessage({ type: '', text: '' });
+                                    setMessage({type: '', text: ''});
                                 }}
                             >
                                 {isLogin ? 'Sign up' : 'Login'}
