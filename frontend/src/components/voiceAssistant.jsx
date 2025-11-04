@@ -124,7 +124,7 @@ const Dictaphone = () => {
                 toast.success(message || "AI response received", {
                     duration: 10000
                 });
-                <TextToSpeech text={message}/>
+
             } else {
                 toast.error(message || "Something went wrong while interpreting.");
             }
@@ -262,7 +262,7 @@ const Dictaphone = () => {
                             </div>
                         </div>
                     )}
-
+                    {message && <TextToSpeech text={message}/>}
                     {/* Action Buttons */}
                     <div className="flex gap-4 pt-2">
                         <Button 
