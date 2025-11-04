@@ -8,7 +8,7 @@ import doctorAuthRoutes from './routes/doctor.routes.js';
 import patientAuthRoutes from './routes/patient.routes.js';
 import visitorsRouter from './routes/visitors.routes.js';
 import hospitalsRouter from './routes/hospital.routes.js';
-import aiRouter from "./routes/aiRouter.routes.js";
+import aiRouter from './routes/aiRouter.routes.js';
 
 const app = express();
 

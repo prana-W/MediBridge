@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import {GoogleGenAI} from '@google/genai';
 
 const ai = new GoogleGenAI({});
 
@@ -10,7 +10,7 @@ const DEPARTMENTS = [
     'orthopedic',
     'pediatrician',
     'neurologist',
-    'dentist'
+    'dentist',
 ];
 
 function findBestHospital(hospitals, userInput) {
@@ -20,7 +20,7 @@ function findBestHospital(hospitals, userInput) {
         const name = hospital.name.toLowerCase();
         const acronym = hospital.name
             .split(' ')
-            .map(word => word[0])
+            .map((word) => word[0])
             .join('')
             .toLowerCase();
 
@@ -42,7 +42,11 @@ function findBestHospital(hospitals, userInput) {
     return null;
 }
 
-async function processVoiceCommand(voiceText, accessToken = '', baseURL = process.env.SERVER_URL) {
+async function processVoiceCommand(
+    voiceText,
+    accessToken = '',
+    baseURL = process.env.SERVER_URL
+) {
     try {
         // Ensure baseURL has protocol
         if (baseURL && !baseURL.startsWith('http')) {
@@ -77,50 +81,68 @@ Examples:
   Response: {"symptoms": "chest pain", "hospitalMentioned": "Apollo Hospital", "suggestedDepartment": "cardiologist", "reasoning": "chest pain requires cardiac evaluation"}`;
 
         const analysisResponse = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: analysisPrompt
+            model: 'gemini-2.5-flash',
+            contents: analysisPrompt,
         });
 
         let analysis;
         try {
-            const jsonText = analysisResponse.text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+            const jsonText = analysisResponse.text
+                .replace(/```json\n?/g, '')
+                .replace(/```\n?/g, '')
+                .trim();
             analysis = JSON.parse(jsonText);
         } catch (e) {
             return {
                 success: false,
-                message: "I had trouble understanding your request. Could you please rephrase it?"
+                message:
+                    'I had trouble understanding your request. Could you please rephrase it?',
             };
         }
 
         // Validate required information
-        if (!analysis.symptoms || analysis.symptoms === "none" || analysis.symptoms === "null") {
+        if (
+            !analysis.symptoms ||
+            analysis.symptoms === 'none' ||
+            analysis.symptoms === 'null'
+        ) {
             return {
                 success: false,
-                message: "Please tell me what symptoms or health issues you're experiencing so I can book the right appointment.",
-                message_hi: "कृपया बताएं कि आपको क्या लक्षण या स्वास्थ्य समस्याएं हो रही हैं ताकि मैं सही अपॉइंटमेंट बुक कर सकूं।"
+                message:
+                    "Please tell me what symptoms or health issues you're experiencing so I can book the right appointment.",
+                message_hi:
+                    'कृपया बताएं कि आपको क्या लक्षण या स्वास्थ्य समस्याएं हो रही हैं ताकि मैं सही अपॉइंटमेंट बुक कर सकूं।',
             };
         }
 
-        if (!analysis.hospitalMentioned || analysis.hospitalMentioned === "null") {
+        if (
+            !analysis.hospitalMentioned ||
+            analysis.hospitalMentioned === 'null'
+        ) {
             return {
                 success: false,
-                message: "Please specify which hospital you'd like to book an appointment at.",
-                message_hi: "कृपया बताएं कि आप किस अस्पताल में अपॉइंटमेंट बुक करना चाहते हैं।"
+                message:
+                    "Please specify which hospital you'd like to book an appointment at.",
+                message_hi:
+                    'कृपया बताएं कि आप किस अस्पताल में अपॉइंटमेंट बुक करना चाहते हैं।',
             };
         }
 
         // Step 2: Fetch available hospitals
-        const hospitalsResponse = await fetch(`${process.env.SERVER_URL}/hospital`, {
-            headers: {
-                "Content-Type": "application/json",
-                Cookie: `accessToken=${accessToken}`
-            },
-        });
+        const hospitalsResponse = await fetch(
+            `${process.env.SERVER_URL}/hospital`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Cookie: `accessToken=${accessToken}`,
+                },
+            }
+        );
 
         if (!hospitalsResponse.ok) {
             return {
                 success: false,
-                message: `Failed to fetch hospitals: ${hospitalsResponse.statusText}`
+                message: `Failed to fetch hospitals: ${hospitalsResponse.statusText}`,
             };
         }
 
@@ -135,18 +157,21 @@ Examples:
         } else {
             return {
                 success: false,
-                message: 'Invalid hospital data format received'
+                message: 'Invalid hospital data format received',
             };
         }
 
         // Step 3: Match hospital
-        const matchedHospital = findBestHospital(hospitals.data, analysis.hospitalMentioned);
+        const matchedHospital = findBestHospital(
+            hospitals.data,
+            analysis.hospitalMentioned
+        );
 
         if (!matchedHospital) {
-            const hospitalNames = hospitals.map(h => h.name).join(', ');
+            const hospitalNames = hospitals.map((h) => h.name).join(', ');
             return {
                 success: false,
-                message: `I couldn't find a hospital matching "${analysis.hospitalMentioned}". Available hospitals: ${hospitalNames}`
+                message: `I couldn't find a hospital matching "${analysis.hospitalMentioned}". Available hospitals: ${hospitalNames}`,
             };
         }
 
@@ -155,30 +180,36 @@ Examples:
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
+                Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify({
                 department: analysis.suggestedDepartment,
-                hospital: matchedHospital.name
-            })
+                hospital: matchedHospital.name,
+            }),
         });
 
         const slotsData = await slotsResponse.json();
 
-        if (!slotsData.success || !slotsData.data || slotsData.data.length === 0) {
+        if (
+            !slotsData.success ||
+            !slotsData.data ||
+            slotsData.data.length === 0
+        ) {
             return {
                 success: false,
-                message: `No available doctors found in ${analysis.suggestedDepartment} department at ${matchedHospital.name}.`
+                message: `No available doctors found in ${analysis.suggestedDepartment} department at ${matchedHospital.name}.`,
             };
         }
 
         // Step 5: Find doctor with available slots
-        const availableDoctor = slotsData.data.find(doc => !doc.isFullyBooked && doc.availableSlots > 0);
+        const availableDoctor = slotsData.data.find(
+            (doc) => !doc.isFullyBooked && doc.availableSlots > 0
+        );
 
         if (!availableDoctor) {
             return {
                 success: false,
-                message: `All doctors in ${analysis.suggestedDepartment} department at ${matchedHospital.name} are fully booked. Please try another time or hospital.`
+                message: `All doctors in ${analysis.suggestedDepartment} department at ${matchedHospital.name} are fully booked. Please try another time or hospital.`,
             };
         }
 
@@ -187,12 +218,12 @@ Examples:
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`
+                Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify({
                 doctorId: availableDoctor._id,
-                slotNumber: availableDoctor.currentSlot
-            })
+                slotNumber: availableDoctor.currentSlot,
+            }),
         });
 
         const bookingData = await bookingResponse.json();
@@ -200,15 +231,16 @@ Examples:
         if (!bookingData.success) {
             return {
                 success: false,
-                message: "Failed to book the appointment. Please try again."
+                message: 'Failed to book the appointment. Please try again.',
             };
         }
 
         // Step 7: Convert slot number to time (assuming slots start at 8 AM)
         const slotTime = `${availableDoctor.currentSlot + 8}:00`;
-        const timeFormat = availableDoctor.currentSlot + 8 <= 12
-            ? `${availableDoctor.currentSlot + 8} AM`
-            : `${availableDoctor.currentSlot + 8 - 12} PM`;
+        const timeFormat =
+            availableDoctor.currentSlot + 8 <= 12
+                ? `${availableDoctor.currentSlot + 8} AM`
+                : `${availableDoctor.currentSlot + 8 - 12} PM`;
 
         return {
             success: true,
@@ -220,25 +252,29 @@ Examples:
                 slotNumber: availableDoctor.currentSlot,
                 slotTime: timeFormat,
                 symptoms: analysis.symptoms,
-                reasoning: analysis.reasoning
-            }
+                reasoning: analysis.reasoning,
+            },
         };
-
     } catch (error) {
         console.error('Error processing voice command:', error);
         return {
             success: false,
-            message: "An error occurred while processing your request. Please try again.",
-            error: error.message
+            message:
+                'An error occurred while processing your request. Please try again.',
+            error: error.message,
         };
     }
 }
 
-async function handleVoiceInput(voiceText, accessToken = '', baseURL = process.env.SERVER_URL) {
+async function handleVoiceInput(
+    voiceText,
+    accessToken = '',
+    baseURL = process.env.SERVER_URL
+) {
     console.log(`Processing: "${voiceText}"`);
     const result = await processVoiceCommand(voiceText, accessToken, baseURL);
     console.log('Result:', result);
     return result;
 }
 
-export { processVoiceCommand, handleVoiceInput };
+export {processVoiceCommand, handleVoiceInput};
