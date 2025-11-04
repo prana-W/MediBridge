@@ -2,7 +2,7 @@ import { processVoiceCommand } from '../utility/aiModel.js';
 import { ApiError, ApiResponse, asyncHandler } from '../utility/index.js';
 
 const aiController = asyncHandler(async (req, res) => {
-    const { transcript } = req.body;
+    const { transcript, language } = req.body;
 
     if (!transcript) {
         throw new ApiError(400, 'Transcript is required');
